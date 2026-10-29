@@ -5,7 +5,7 @@
 (define deps '("base" "markdown" "http-easy"))
 (define build-deps '("base" "rackunit-lib"))
 (define pkg-desc "Wang Yin blog archive: crawl, lint, build the static site")
-(define pkg-authors '(turinglambdaai))
+(define pkg-authors '(turlamai))
 (define raco-commands
   '(("yinwang-archive" yinwang-archive/raco-yinwang-archive
      "blog archive pipeline: crawl / lint / fix-bold / normalize-code / build / notify" #f)))

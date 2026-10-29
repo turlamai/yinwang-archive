@@ -42,7 +42,7 @@ yinwang-archive/
 ### 1. 克隆仓库
 
 ```bash
-git clone https://github.com/turinglambdaai/yinwang-archive.git
+git clone https://github.com/turlamai/yinwang-archive.git
 cd yinwang-archive
 ```
 

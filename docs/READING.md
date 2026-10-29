@@ -24,4 +24,4 @@ For formatting, broken images or wrong source links, include the archive URL, or
 
 The program is MIT; archived articles and images remain copyrighted by their authors. The archive sells no exclusive rights and does not relicense the posts.
 
-[Issues](https://github.com/turinglambdaai/yinwang-archive/issues) · [README](../README.md)
+[Issues](https://github.com/turlamai/yinwang-archive/issues) · [README](../README.md)
