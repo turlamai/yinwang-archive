@@ -24,4 +24,4 @@
 
 程序为 MIT；归档文章与图片版权归原作者，不销售独占权利，也不重新许可文章。
 
-[Issues](https://github.com/turinglambdaai/yinwang-archive/issues) · [README](../README.zh-CN.md)
+[Issues](https://github.com/turlamai/yinwang-archive/issues) · [README](../README.zh-CN.md)
