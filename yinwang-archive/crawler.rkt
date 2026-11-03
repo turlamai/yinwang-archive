@@ -40,10 +40,34 @@
 
 ;; ---- API ----
 
+;; A scheduled crawl is read-only. Retry transient connection failures
+;; with bounded backoff, but never convert an unreachable upstream into a
+;; successful (empty) crawl or overwrite an existing index with no evidence.
+(define (retryable-network-error? e)
+  (or (exn:fail:network? e)
+      (regexp-match? #rx"(?i:timed out|timeout|connection reset|temporary failure)"
+                     (exn-message e))))
+
+(define (with-network-retries thunk #:attempts [limit 4] #:pause [pause sleep])
+  (let loop ([attempt 1])
+    (with-handlers
+        ([(λ (e) (and (exn:fail? e)
+                      (retryable-network-error? e)))
+          (λ (e)
+            (if (>= attempt limit)
+                (raise e)
+                (begin
+                  (eprintf "  Transient crawl request error (attempt ~a/~a): ~a; retrying.\\n"
+                           attempt limit (exn-message e))
+                  (pause (expt 2 (sub1 attempt)))
+                  (loop (add1 attempt)))))])
+      (thunk))))
+
 (define (api-get url)
-  (get url
-       #:headers (hasheq 'User-Agent user-agent)
-       #:timeouts timeouts))
+  (with-network-retries
+   (λ () (get url
+              #:headers (hasheq 'User-Agent user-agent)
+              #:timeouts timeouts))))
 
 (define (fetch-all-slugs)
   (let loop ([skip 0] [acc '()])
@@ -318,3 +342,39 @@
 
 (define (crawl-command [root (current-directory)] [force? #f])
   (crawl #:force force? #:root root))
+
+;; Transport recovery must not change success/error semantics. The final
+;; transient exception still fails the scheduled workflow and preserves data.
+(module+ test
+  (require rackunit)
+  (define attempts 0)
+  (define pauses '())
+  (check-equal?
+   (with-network-retries
+    (λ ()
+      (set! attempts (add1 attempts))
+      (if (< attempts 3)
+          (error 'network "connect timed out")
+          'recovered))
+    #:pause (λ (delay) (set! pauses (append pauses (list delay)))))
+   'recovered)
+  (check-equal? attempts 3)
+  (check-equal? pauses '(1 2))
+  (set! attempts 0)
+  (check-exn exn:fail?
+             (λ ()
+               (with-network-retries
+                (λ ()
+                  (set! attempts (add1 attempts))
+                  (error 'network "connect timed out"))
+                #:attempts 3 #:pause (λ (_) (void)))))
+  (check-equal? attempts 3)
+  (set! attempts 0)
+  (check-exn exn:fail?
+             (λ ()
+               (with-network-retries
+                (λ ()
+                  (set! attempts (add1 attempts))
+                  (error 'crawler "invalid input"))
+                #:pause (λ (_) (void)))))
+  (check-equal? attempts 1))
