@@ -2,7 +2,7 @@
 
 (define collection "yinwang-archive")
 (define version "1.0.0")
-(define deps '("base" "markdown" "http-easy"))
+(define deps '("base" "markdown" "http-easy" "parsack"))
 (define build-deps '("base" "rackunit-lib"))
 (define pkg-desc "Wang Yin blog archive: crawl, lint, build the static site")
 (define pkg-authors '(turlamai))

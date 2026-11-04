@@ -1,6 +1,6 @@
 # Yinwang Blog Archive
 
-王垠博客（[yinwang.org](https://www.yinwang.org)）文章自动备份。通过 GitHub Actions 每周自动爬取，将所有博文保存为 Markdown 文件并下载图片。已删除的文章通过 Git 历史保留。
+王垠博客（[yinwang.org](https://yinwang.org)）文章自动备份。通过 GitHub Actions 每周自动爬取，将所有博文保存为 Markdown 文件并下载图片。已删除的文章通过 Git 历史保留。
 
 ![Racket](https://img.shields.io/badge/Racket-9E3E97?logo=racket&logoColor=white) [![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
@@ -80,11 +80,11 @@ raco yinwang-archive notify                                # 新文章邮件提�
 
 ## 工作原理
 
-1. **获取文章列表** — 爬虫调用 `https://www.yinwang.org/api/v1/posts` 接口，通过分页参数（`skip`/`limit`）获取所有文章 slug。
+1. **获取文章列表** — 爬虫调用 `https://yinwang.org/api/v1/posts` 接口，通过分页参数（`skip`/`limit`）获取所有文章 slug。
 2. **去重检查** — 根据已有的 `source` URL 构建索引，避免生成重复文件。
-3. **逐篇下载** — 对每个 slug，从 `https://www.yinwang.org/api/v1/posts/{slug}` 获取完整文章内容。
+3. **逐篇下载** — 对每个 slug，从 `https://yinwang.org/api/v1/posts/{slug}` 获取完整正文（`content_html`，HTML），转换为 Markdown。
 4. **下载图片** — 文章中引用的所有图片下载到 `images/{slug}/` 目录。
-5. **格式化并保存** — 对内容进行排版处理（CJK 间距、标题层级规范化、代码块转围栏），生成带 YAML frontmatter 的 Markdown 文件。
+5. **格式化并保存** — 对转换后的 Markdown 做排版处理（CJK 间距、标题层级规范化、代码块转围栏），生成带 YAML frontmatter 的文件。若多数文章拿不到正文，爬取会显式报错而不是静默停更。
 6. **更新索引** — 将每篇已处理文章的元数据更新到 `index.json`（与历史 Python 序列化器字节兼容，无变化时不产生 diff）。
 7. **建站** — 生成器将 Markdown 渲染为 HTML（标题锚点、围栏代码 + 客户端 highlight.js、Atom 订阅、搜索索引、sitemap、llms.txt）输出到 `dist/`。
 
@@ -98,7 +98,7 @@ title: "我的博客文章"
 slug: my-blog-post
 author: 王垠
 created: 2025-01-15
-source: https://www.yinwang.org/posts/my-blog-post
+source: https://yinwang.org/posts/my-blog-post
 ---
 # 我的博客文章
 

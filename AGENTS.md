@@ -41,7 +41,8 @@ raco yinwang-archive notify [--root DIR]            # 新文章邮件（缺省 d
 
 ## 包结构（yinwang-archive/）
 
-- `crawler.rkt`：主爬虫。增量逻辑 = source URL 去重 + `updated_at` 未变跳过；`format-content` 含自愈链（坏强调修复、顶层缩进代码转围栏、层级规范化、盘古空格），新爬内容自动规范化
+- `crawler.rkt`：主爬虫。增量逻辑 = source URL 去重 + `updated_at` 未变跳过；正文取 API 的 `content_html`（HTML，经 `htmlmd.rkt` 转 Markdown；兼容旧 `content` 字段）；`format-content` 含自愈链（坏强调修复、顶层缩进代码转围栏、层级规范化、盘古空格），新爬内容自动规范化。爬完后若「无正文」文章数超阈值（默认 10）则报错退出——防止源站 API schema 变更时存档静默停更（2026-10 事故教训）
+- `htmlmd.rkt`：`content_html` → Markdown 转换。解析用 catalog `markdown` 包的 HTML parser，实体先编码为 PUA 占位符再还原（该 parser 会吞掉文本中的实体）；heading-anchor 解包、`<img width>` 保留 HTML 形式、`<ol start>` 续编号、h4+ 转加粗、`<pre>` 保留原文并剥真实标签
 - `format.rkt`：自愈链本体，`lint.rkt`/`fixers.rkt` 与其共享（lint 把 transform 输出与原文比较判损伤）
 - `render.rkt`：Markdown → HTML。用 catalog 的 `markdown` 包解析 + 后处理对齐历史 markdown-it 行为：锚点 slugify（trim/lowercase/空白→`-`，重名加 `-1`）、figure div 还原为裸 img、`brush:` class 换 `language-x`、`**粗体**` 预转 `<strong>`（解析器对 CJK 相邻粗体有 bug）、smart typography 实体解回 ASCII
 - `site.rkt`：全部页面模板（base/post/index/feed/search/sitemap/llms），浏览器端 JS（搜索/进度条/lightbox/TOC）原样保留——属合法薄壳层
@@ -64,7 +65,7 @@ slug: mites
 author: 王垠
 created: 2026-07-15
 updated: 2026-09-01
-source: https://www.yinwang.org/posts/mites
+source: https://yinwang.org/posts/mites
 ---
 ```
 

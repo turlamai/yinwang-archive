@@ -36,7 +36,7 @@
 (define (site-src-dir [root (current-directory)])
   (build-path root "src" "site"))
 
-(define base-url "https://www.yinwang.org")
+(define base-url "https://yinwang.org")
 (define site-name "王垠博客备份")
 (define site-base-url (or (getenv "SITE_BASE_URL") "https://yinwang.jrtx.site"))
 (define site-language (or (getenv "SITE_MAIN_LANGUAGE") "zh"))
