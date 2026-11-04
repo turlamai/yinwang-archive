@@ -14,8 +14,8 @@
 (define mites-slug "mites")
 
 (test-case "frontmatter round-trips"
-  (define fm (generate-frontmatter "标\"题" mites-slug "王垠" "2026-07-15" #f "https://www.yinwang.org/posts/mites"))
-  (check-equal? fm "---\ntitle: \"标\\\"题\"\nslug: mites\nauthor: 王垠\ncreated: 2026-07-15\nsource: https://www.yinwang.org/posts/mites\n---\n")
+  (define fm (generate-frontmatter "标\"题" mites-slug "王垠" "2026-07-15" #f "https://yinwang.org/posts/mites"))
+  (check-equal? fm "---\ntitle: \"标\\\"题\"\nslug: mites\nauthor: 王垠\ncreated: 2026-07-15\nsource: https://yinwang.org/posts/mites\n---\n")
   (define parsed (parse-frontmatter (string-append fm "body")))
   (check-equal? (dict-ref parsed 'title) "标\"题")
   (check-equal? (dict-ref parsed 'slug) mites-slug))

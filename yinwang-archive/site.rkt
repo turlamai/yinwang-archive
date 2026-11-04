@@ -241,7 +241,7 @@ SCRIPT
         "            " site-logo-svg "\n"
         "          </div>\n"
         (format "          <h1 class=\"site-title\">~a</h1>\n" (html-escape site-name))
-        "          <p class=\"site-desc\">自动备份 <a href=\"https://www.yinwang.org\">yinwang.org</a> 博客文章</p>\n"
+        "          <p class=\"site-desc\">自动备份 <a href=\"https://yinwang.org\">yinwang.org</a> 博客文章</p>\n"
         "        </div>\n"
         "      </header>\n"))
    "      <main class=\"container\">\n"

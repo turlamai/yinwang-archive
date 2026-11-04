@@ -1,6 +1,6 @@
 # Yinwang Blog Archive
 
-Auto-crawled archive of [yinwang.org](https://www.yinwang.org) blog posts by Wang Yin. The crawler runs weekly via GitHub Actions, saving every post as Markdown with images. Deleted articles are preserved through Git history.
+Auto-crawled archive of [yinwang.org](https://yinwang.org) blog posts by Wang Yin. The crawler runs weekly via GitHub Actions, saving every post as Markdown with images. Deleted articles are preserved through Git history.
 
 ![Racket](https://img.shields.io/badge/Racket-9E3E97?logo=racket&logoColor=white) [![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
@@ -81,11 +81,11 @@ the current directory.
 
 ## How It Works
 
-1. **Fetch post list** — the crawler calls `https://www.yinwang.org/api/v1/posts` with pagination (`skip`/`limit`) to get all post slugs.
+1. **Fetch post list** — the crawler calls `https://yinwang.org/api/v1/posts` with pagination (`skip`/`limit`) to get all post slugs.
 2. **Deduplicate** — it builds an index of existing posts by `source` URL to avoid duplicates.
-3. **Download each post** — for each slug, it fetches the full post content from `https://www.yinwang.org/api/v1/posts/{slug}`.
+3. **Download each post** — for each slug, it fetches the full post body (`content_html`, HTML) from `https://yinwang.org/api/v1/posts/{slug}` and converts it to Markdown.
 4. **Download images** — all images referenced in the post are downloaded to `images/{slug}/`.
-5. **Format and save** — the content is reformatted (CJK spacing, heading normalization, code fence conversion) and saved as a Markdown file with YAML frontmatter.
+5. **Format and save** — the converted Markdown is reformatted (CJK spacing, heading normalization, code fence conversion) and saved with YAML frontmatter. If most posts come back without a body, the crawl fails loudly instead of silently freezing the archive.
 6. **Update index** — `index.json` is updated with metadata for each processed post (byte-compatible with the historical Python serializer, so no-op crawls stay diff-free).
 7. **Build** — the site generator renders Markdown → HTML (heading anchors, fenced code with client-side highlight.js, Atom feed, search index, sitemap, llms.txt) into `dist/`.
 
@@ -99,7 +99,7 @@ title: "My Blog Post"
 slug: my-blog-post
 author: 王垠
 created: 2025-01-15
-source: https://www.yinwang.org/posts/my-blog-post
+source: https://yinwang.org/posts/my-blog-post
 ---
 # My Blog Post
 

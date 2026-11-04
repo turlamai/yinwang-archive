@@ -16,6 +16,7 @@
          racket/format
          racket/match
          "util.rkt"
+         "htmlmd.rkt"
          "format.rkt"
          "frontmatter.rkt")
 
@@ -41,14 +42,16 @@
 ;; ---- API ----
 
 ;; A scheduled crawl is read-only. Retry transient connection failures
-;; with bounded backoff, but never convert an unreachable upstream into a
-;; successful (empty) crawl or overwrite an existing index with no evidence.
+;; with bounded backoff (the source host has been flaky for some network
+;; paths since the 2026 redesign), but never convert an unreachable
+;; upstream into a successful (empty) crawl or overwrite an existing
+;; index with no evidence.
 (define (retryable-network-error? e)
   (or (exn:fail:network? e)
-      (regexp-match? #rx"(?i:timed out|timeout|connection reset|temporary failure)"
+      (regexp-match? #rx"(?i:timed out|timeout|connection reset|temporary failure|terminated prematurely)"
                      (exn-message e))))
 
-(define (with-network-retries thunk #:attempts [limit 4] #:pause [pause sleep])
+(define (with-network-retries thunk #:attempts [limit 6] #:pause [pause sleep])
   (let loop ([attempt 1])
     (with-handlers
         ([(λ (e) (and (exn:fail? e)
@@ -210,6 +213,17 @@
   (write-utf8! filepath (string-append frontmatter body))
   (printf "  Saved: ~a\n" (path->string (file-name-from-path filepath))))
 
+;; ---- post body ----
+
+;; The 2026 backend redesign serves every body as `content_html` (HTML);
+;; snapshots before it exposed pre-formatted Markdown as `content`.
+;; Both are accepted so the crawler survives either schema.
+(define (post-body post)
+  (define html (jstr (jref post 'content_html 'null)))
+  (if (equal? html "")
+      (jstr (jref post 'content 'null))
+      (html->markdown html)))
+
 ;; ---- dedup + index ----
 
 ;; source URL -> file path, from the existing posts directory
@@ -266,16 +280,24 @@
 
 ;; ---- crawl ----
 
-(struct crawl-state (entries new-count updated-count skip-count failures))
+(struct crawl-state (entries new-count updated-count skip-count failures no-content-count))
 
-(define (crawl #:force [force? #f] #:root [root (current-directory)])
+;; a crawl that comes back with most bodies missing means the source API
+;; schema drifted again (2026-10: `content` became `content_html`); the
+;; old behavior silently "succeeded" while freezing the archive — fail
+;; loudly instead
+(define default-max-no-content 10)
+
+(define (crawl #:force [force? #f]
+               #:root [root (current-directory)]
+               #:max-no-content [max-no-content default-max-no-content])
   (printf "Fetching post list from API...\n")
   (define all-posts (fetch-all-slugs))
   (define source-index (build-source-index root))
   (define total (length all-posts))
 
   (define final-state
-    (for/fold ([st (crawl-state (load-index root) 0 0 0 '())])
+    (for/fold ([st (crawl-state (load-index root) 0 0 0 '() 0)])
               ([post-meta (in-list all-posts)] [i (in-naturals)])
       (define slug (jref post-meta 'slug))
       (define source-url (format "~a/posts/~a" base-url slug))
@@ -294,19 +316,25 @@
          (crawl-state (crawl-state-entries st)
                       (crawl-state-new-count st)
                       (crawl-state-updated-count st)
-                      (+ (crawl-state-skip-count st) 1)
-                      (crawl-state-failures st))]
+                      (crawl-state-skip-count st)
+                      (crawl-state-failures st)
+                      (crawl-state-no-content-count st))]
 
         [else
          (printf "[~a/~a] Processing: ~a\n" (+ i 1) total slug)
          (define post (fetch-post slug))
          (cond
            [(or (not post)
-                (equal? (jstr (jref post 'content 'null)) ""))
+                (equal? (post-body post) ""))
             (printf "  Skipping (no content)\n")
-            st]
+            (crawl-state (crawl-state-entries st)
+                         (crawl-state-new-count st)
+                         (crawl-state-updated-count st)
+                         (crawl-state-skip-count st)
+                         (crawl-state-failures st)
+                         (add1 (crawl-state-no-content-count st)))]
            [else
-            (define content (jref post 'content))
+            (define content (post-body post))
             (define failures (download-post-images slug content root))
             (save-post post content root)
             (define entry
@@ -325,7 +353,8 @@
                              (+ (crawl-state-updated-count st) 1)
                              (crawl-state-updated-count st))
                          (crawl-state-skip-count st)
-                         (append (crawl-state-failures st) failures))])])))
+                         (append (crawl-state-failures st) failures)
+                         (crawl-state-no-content-count st))])])))
 
   (save-index! (crawl-state-entries final-state) root)
   (printf "\nDone! New: ~a, Updated: ~a, Skipped: ~a\n"
@@ -336,6 +365,11 @@
   (unless (null? failures)
     (printf "Image download failures: ~a\n" (length failures))
     (for ([f (in-list failures)]) (printf "  - ~a\n" f)))
+  (define no-content (crawl-state-no-content-count final-state))
+  (when (> no-content max-no-content)
+    (error 'crawl
+           "~a of ~a posts returned no content; the source API schema may have changed"
+           no-content total))
   0)
 
 ;; ---- CLI ----

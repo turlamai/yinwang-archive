@@ -13,7 +13,7 @@
         (cons 'author "王垠")
         (cons 'created "2026-01-01")
         (cons 'updated #f)
-        (cons 'source "https://www.yinwang.org/posts/test")
+        (cons 'source "https://yinwang.org/posts/test")
         (cons 'html "<p>正文</p>")
         (cons 'url "/posts/test/")))
 
