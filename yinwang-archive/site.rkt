@@ -254,6 +254,8 @@ SCRIPT
    "            <a href=\"/feed.xml\">RSS</a>\n"
    "            <span class=\"sep\">&middot;</span>\n"
    "            <a href=\"/wechat/\">站长原创：公众号 TuringLambdaAI</a>\n"
+   "            <span class=\"sep\">&middot;</span>\n"
+   "            <a href=\"https://jrtx.site/\">全部产品</a>\n"
    "          </p>\n"
    "        </div>\n"
    "      </footer>\n"

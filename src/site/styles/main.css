@@ -1,12 +1,21 @@
+@font-face {
+  font-family: "Newsreader";
+  src: url("/fonts/newsreader-latin-var.woff2") format("woff2");
+  font-weight: 300 800;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   --bg: #F9F7F4;
   --surface: #FFFFFF;
   --text: #1C1917;
   --text-2: #57534E;
   --text-3: #A8A29E;
-  --accent: #C2712C;
-  --accent-hover: #A35F28;
-  --accent-bg: #FFF7ED;
+  /* Family palette (site-kit): one terracotta across jrtx.site. */
+  --accent: #D97757;
+  --accent-hover: #C25F3D;
+  --accent-bg: #FBEDE7;
   --border: #E7E5E4;
   --shadow: 0 1px 3px rgba(28, 25, 23, 0.06), 0 1px 2px rgba(28, 25, 23, 0.04);
   --shadow-md: 0 4px 6px -1px rgba(28, 25, 23, 0.07), 0 2px 4px -2px rgba(28, 25, 23, 0.05);
@@ -938,3 +947,12 @@ html { scroll-behavior: smooth; }
 .hljs-title, .hljs-section, .hljs-name { color: var(--hl-title); }
 .hljs-attr, .hljs-attribute, .hljs-variable,
 .hljs-template-variable { color: var(--hl-attr); }
+
+/* ---- family typography: serif display for site + post titles ---- */
+.site-title,
+.post-title,
+.archive-title {
+  font-family: "Newsreader", "Songti SC", "Noto Serif SC", "SimSun", Georgia, serif;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
