@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>王垠博客备份 — 原型 2/5 文章阅读页</title>
+<link rel="stylesheet" href="shared.css">
+<style>
+  /* ==== 阅读页专属（本屏无新增组件，正文/TOC/post-nav 见 shared.css） ==== */
+  .post-content pre { font-size: 13.5px; }
+</style>
+</head>
+<body>
+  <div class="proto-bar">
+    <span>原型 <span class="n">2/5</span> · 文章阅读页（键盘 ← / → 换篇，Ctrl K 搜索）</span>
+    <button type="button" data-theme-toggle>◐ 亮 / 暗</button>
+  </div>
+
+  <div class="reading-progress" id="reading-progress" aria-hidden="true"></div>
+
+  <header class="site-header site-header--compact">
+    <div class="container">
+      <a class="site-logo site-logo--compact" href="index.html" aria-label="返回首页">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 2c1.85 0 3.55.63 4.9 1.69L14.3 8.8a4.97 4.97 0 0 0-4.6 0L7.1 5.69A7.96 7.96 0 0 1 12 4zM4 12c0-1.85.63-3.55 1.69-4.9L8.8 9.7a4.97 4.97 0 0 0 0 4.6l-3.11 2.6A7.96 7.96 0 0 1 4 12zm8 8c-1.85 0-3.55-.63-4.9-1.69l2.6-3.11a4.97 4.97 0 0 0 4.6 0l2.6 3.11A7.96 7.96 0 0 1 12 20zm6.31-3.1L15.2 14.3a4.97 4.97 0 0 0 0-4.6l3.11-2.6A7.96 7.96 0 0 1 20 12c0 1.85-.63 3.55-1.69 4.9z"/></svg>
+      </a>
+      <a class="site-title-link" href="index.html"><span class="site-title">王垠博客备份</span></a>
+    </div>
+  </header>
+
+  <main class="container">
+    <article class="post">
+      <header class="post-header">
+        <h1>DRY原则的误区</h1>
+        <div class="post-meta">
+          <span>王垠</span>
+          <span class="sep">&middot;</span>
+          <time>2015-06-14</time>
+          <span class="sep">&middot;</span>
+          <a href="https://www.yinwang.org/posts/dry-principle" target="_blank" rel="noopener">原文</a>
+        </div>
+      </header>
+
+      <!-- 渐进增强 TOC：≥3 个 h2/h3 时由浏览器端 JS 注入；原型静态呈现展开态 -->
+      <details class="post-toc" open>
+        <summary>本文目录</summary>
+        <div class="post-toc-list">
+          <a class="post-toc-h2" href="#tradeoff">抽象与可读性的矛盾</a>
+          <a class="post-toc-h2" href="#timing">抽象的时机问题</a>
+          <a class="post-toc-h2" href="#principles">谨慎的对待所谓原则</a>
+        </div>
+      </details>
+
+      <div class="post-content">
+        <p>很多编程的人，喜欢鼓吹各种各样的“原则”，比如 KISS 原则，DRY 原则……总有人把这些所谓原则奉为教条或者秘方，以为兢兢业业地遵循这些，空喊几个口号，就可以写出好的代码。同时，他们对违反这些原则的人嗤之以鼻——你不知道，不遵循或者藐视这些原则，那么你就是菜鸟。所谓“<a href="https://en.wikipedia.org/wiki/Don%27t_repeat_yourself" target="_blank" rel="noopener">DRY 原则</a>”（Don't Repeat Yourself，不要重复你自己）就是这些教条其中之一。盲目的迷信 DRY 原则，在实际的工程中带来了各种各样的问题，却经常被忽视。</p>
+        <p>简言之，DRY 原则鼓励对代码进行抽象，但是鼓励得过了头。DRY 原则说，如果你发现重复的代码，就把它们提取出去做成一个“模板”或者“框架”。对于抽象我非常的在行，实际上程序语言专家做的许多研究，就是如何设计更好的抽象。然而我并不奉行所谓 DRY 原则，并不是尽一切可能避免“重复”。“避免重复”并不等于“抽象”。有时候适当的重复代码是有好处的，所以我有时候会故意的进行重复。</p>
+
+        <h2 id="tradeoff">抽象与可读性的矛盾</h2>
+        <p>代码的“抽象”和它的“可读性”（直观性），其实是一对矛盾的关系。适度的抽象和避免重复是有好处的，它甚至可以提高代码的可读性，然而如果你尽“一切可能”从代码里提取模板，甚至把一些微不足道的“共同点”也提出来进行“共享”，它就开始有害了。这是因为，模板并不直接显示在“调用”它们的位置。提取出模板，往往会使得阅读代码时不能一目了然。如果由此带来的直观性损失超过了模板所带来的好处时，你就应该考虑避免抽象了。要知道，代码读的次数要比写的次数多很多。</p>
+        <p>举一个实际的例子。奉行 DRY 原则的人，往往喜欢提取类里面的“共同 field”，把它们放进一个父类。比如，本来的代码可能是：</p>
+<pre><code><span class="hljs-keyword">class</span> <span class="hljs-title">A</span> {
+  <span class="hljs-keyword">int</span> a;
+  <span class="hljs-keyword">int</span> x;
+  <span class="hljs-keyword">int</span> y;
+}
+
+<span class="hljs-keyword">class</span> <span class="hljs-title">B</span> {
+  <span class="hljs-keyword">int</span> a;
+  <span class="hljs-keyword">int</span> u;
+  <span class="hljs-keyword">int</span> v;
+}</code></pre>
+        <p>奉行 DRY 原则的人喜欢把它改成这样：</p>
+<pre><code><span class="hljs-keyword">class</span> <span class="hljs-title">C</span> {
+  <span class="hljs-keyword">int</span> a;
+}
+
+<span class="hljs-keyword">class</span> <span class="hljs-title">A</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">C</span> {
+  <span class="hljs-keyword">int</span> x;
+  <span class="hljs-keyword">int</span> y;
+}
+
+<span class="hljs-keyword">class</span> <span class="hljs-title">B</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">C</span> {
+  <span class="hljs-keyword">int</span> u;
+  <span class="hljs-keyword">int</span> v;
+}</code></pre>
+        <p>后面这段代码有什么害处呢？它的问题是，当你看到<code>class A</code>和<code>class B</code>的定义时，你不再能一目了然的看到<code>int a</code>这个 field。“可见性”，对于程序员能够产生直觉，是非常重要的。这种无关紧要的 field，其实大部分时候都没必要提出去，造出一个新的父类。</p>
+
+        <h2 id="timing">抽象的时机问题</h2>
+        <p>奉行 DRY 原则的人还有一个问题，就是他们随时都在试图发现“将来可能重用”的代码，而不是等到真的出现重复的时候再去做抽象。很多时候他们提取出一个貌似“经典模板”，结果最后过了几个月发现，这个模板在所有代码里其实只用过一次。这就是因为他们过早的进行了抽象。</p>
+        <p>防止过早抽象的方法其实很简单，它的名字叫做“等待”。其实就算你不重用代码，真的不会死人的。时间能够告诉你一切。如果你发现自己仿佛正在重复以前写过代码，请先不要停下来，请坚持把这段重复的代码写完。如果你不把它写出来，你是不可能准确的发现重复的代码的，因为它们很有可能到最后其实是不一样的。</p>
+
+        <h2 id="principles">谨慎的对待所谓原则</h2>
+        <p>说了这么多，我是在支持 DRY，还是反对 DRY 呢？其实不管是支持还是反对它，都会表示我在乎它，而其实呢，我完全不在乎这类原则，因为它们非常的肤浅。人们写程序，本来自然而然就会在合适的时候进行抽象，避免重复，怎么过了几十年后，某个菜鸟给我们的做法起了个名字叫 DRY，反而他成了“大师”一样的人物，我倒要用“DRY”这个词来描述我一直在干的事情呢？</p>
+      </div>
+
+      <nav class="post-nav" aria-label="文章导航">
+        <a class="post-nav-item post-nav-older" href="#post-nav">
+          <span class="post-nav-label">&larr; 更早一篇</span>
+          <span class="post-nav-title">所谓软件工程</span>
+        </a>
+        <a class="post-nav-item post-nav-newer" href="#post-nav">
+          <span class="post-nav-label">更新一篇 &rarr;</span>
+          <span class="post-nav-title">谈程序的正确性</span>
+        </a>
+      </nav>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>内容版权归原作者所有 · 本站仅作备份存档</p>
+      <p class="footer-links">
+        <a href="#feed.xml">RSS</a>
+        <span class="sep">&middot;</span>
+        <a href="#wechat/">站长原创：公众号 TuringLambdaAI</a>
+        <span class="sep">&middot;</span>
+        <a href="#jrtx.site">全部产品</a>
+      </p>
+    </div>
+  </footer>
+
+  <button id="search-trigger" class="search-trigger" aria-label="搜索">
+    <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="8.5" cy="8.5" r="5.5"/><line x1="13" y1="13" x2="18" y2="18"/></svg>
+    <span class="t">搜索</span>
+    <span class="tip">Ctrl K</span>
+  </button>
+
+  <script>
+    /* 原型专用：阅读进度条 + 亮暗切换；进度逻辑与 site.rkt 内联脚本一致 */
+    (function () {
+      var root = document.documentElement;
+      if (matchMedia('(prefers-color-scheme: dark)').matches) root.classList.add('dark');
+      document.querySelectorAll('[data-theme-toggle]').forEach(function (b) {
+        b.addEventListener('click', function () { root.classList.toggle('dark'); });
+      });
+      var bar = document.getElementById('reading-progress');
+      var article = document.querySelector('.post');
+      if (bar && article) {
+        var update = function () {
+          var r = article.getBoundingClientRect();
+          var total = r.height - window.innerHeight;
+          var passed = Math.min(Math.max(-r.top, 0), Math.max(total, 1));
+          bar.style.width = (total > 0 ? passed / total * 100 : 100) + '%';
+        };
+        window.addEventListener('scroll', update, { passive: true });
+        window.addEventListener('resize', update, { passive: true });
+        update();
+      }
+    })();
+  </script>
+</body>
+</html>

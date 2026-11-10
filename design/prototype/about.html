@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>王垠博客备份 — 原型 4/5 存档说明（新增页提案）</title>
+<link rel="stylesheet" href="shared.css">
+<style>
+  /* ==== 存档说明专属：关键事实卡（数据全为真实机制与数值） ==== */
+  .about-facts {
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 18px 24px; margin: 0 0 36px; display: grid; gap: 10px;
+    font-size: 0.92em;
+  }
+  .about-facts .row { display: flex; gap: 14px; align-items: baseline; }
+  .about-facts .k { flex: none; width: 5.5em; color: var(--text-3); }
+  .about-facts .v { color: var(--text); }
+  .about-facts .v b { font-weight: 600; font-variant-numeric: tabular-nums; }
+</style>
+</head>
+<body>
+  <div class="proto-bar">
+    <span>原型 <span class="n">4/5</span> · 存档说明（新增页提案，落位 /about/）</span>
+    <button type="button" data-theme-toggle>◐ 亮 / 暗</button>
+  </div>
+
+  <header class="site-header site-header--compact">
+    <div class="container">
+      <a class="site-logo site-logo--compact" href="index.html" aria-label="返回首页">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 2c1.85 0 3.55.63 4.9 1.69L14.3 8.8a4.97 4.97 0 0 0-4.6 0L7.1 5.69A7.96 7.96 0 0 1 12 4zM4 12c0-1.85.63-3.55 1.69-4.9L8.8 9.7a4.97 4.97 0 0 0 0 4.6l-3.11 2.6A7.96 7.96 0 0 1 4 12zm8 8c-1.85 0-3.55-.63-4.9-1.69l2.6-3.11a4.97 4.97 0 0 0 4.6 0l2.6 3.11A7.96 7.96 0 0 1 12 20zm6.31-3.1L15.2 14.3a4.97 4.97 0 0 0 0-4.6l3.11-2.6A7.96 7.96 0 0 1 20 12c0 1.85-.63 3.55-1.69 4.9z"/></svg>
+      </a>
+      <a class="site-title-link" href="index.html"><span class="site-title">王垠博客备份</span></a>
+    </div>
+  </header>
+
+  <main class="container">
+    <article class="post">
+      <header class="post-header">
+        <h1>关于本存档</h1>
+        <div class="post-meta">
+          <span>数据来源、同步机制与内容状态</span>
+        </div>
+      </header>
+
+      <div class="about-facts">
+        <div class="row"><span class="k">内容来源</span><span class="v"><b>yinwang.org</b> 官方 API（逐篇抓取，含正文与图片）</span></div>
+        <div class="row"><span class="k">同步机制</span><span class="v">每周一 <b>03:00 UTC</b> 自动增量同步；抓取失败时保留上一份旧副本，不静默丢内容</span></div>
+        <div class="row"><span class="k">最近同步</span><span class="v"><b>2026-11-09</b> · 已收录 <b>176</b> 篇（2012–2026）</span></div>
+        <div class="row"><span class="k">许可</span><span class="v">程序 MIT；文章与图片版权归原作者，<b>不销售、不重新许可</b></span></div>
+      </div>
+
+      <div class="post-content">
+        <h2>本站是什么</h2>
+        <p>这是王垠博客 <a href="https://yinwang.org" target="_blank" rel="noopener">yinwang.org</a> 的免费阅读备份，不是作者的官方网站。每周抓取属于计划任务而不保证成功，失败时可能保留旧副本。排版、图片与代码可能与原文不同，Git 历史可保留旧修订；最新修订请以原站为准。本站不增加付费内容或广告。</p>
+
+        <h2>数据从哪来</h2>
+        <p>文章通过 yinwang.org 的公开 API 逐篇抓取，保存为自带图片的 Markdown；文件名、站点 URL 与图片目录三者一致，标题、作者、发布日期与原文链接记录在每篇文件的元数据里。同步由 GitHub Actions 每周一自动执行：只下载新增或有修改的文章，已有内容不会被覆盖改写。</p>
+
+        <h2>被删除的文章如何保全</h2>
+        <p>源站删除的文章不会从本站消失：由于每篇文件都进入 Git 历史，文章的所有历史修订（包括删除前的最后版本）都可在 GitHub 的提交历史中按文件名回溯查看。存档页在文章被移除后仍可阅读，并会在页首标注移除状态与 Git 历史入口——见<a href="removed.html">已移除文章的阅读态示例</a>。需要下架的版权方可直接邮件联系站长。</p>
+
+        <h2>更正与反馈</h2>
+        <p>发现排版问题、坏图或来源错误，请到 <a href="https://github.com/turlamai/yinwang-archive/issues" target="_blank" rel="noopener">GitHub Issues</a> 提交，附备份 URL、原文 URL 与简短说明。请勿在公开更正报告中提交私密内容或版权材料。</p>
+
+        <h2>隐私</h2>
+        <p>本站使用 Umami 做匿名的访问统计；搜索使用站点生成的本地索引，不向第三方发送你的输入。打开原文链接会离开本站。</p>
+
+        <h2>许可</h2>
+        <p>本站程序以 <a href="https://github.com/turlamai/yinwang-archive/blob/master/LICENSE" target="_blank" rel="noopener">MIT</a> 许可发布；归档文章与图片的版权归原作者所有。本站仅作备份存档，不销售任何内容，也不重新许可文章。</p>
+      </div>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>内容版权归原作者所有 · 本站仅作备份存档</p>
+      <p class="footer-links">
+        <a href="#feed.xml">RSS</a>
+        <span class="sep">&middot;</span>
+        <a href="#wechat/">站长原创：公众号 TuringLambdaAI</a>
+        <span class="sep">&middot;</span>
+        <a href="#jrtx.site">全部产品</a>
+      </p>
+    </div>
+  </footer>
+
+  <button id="search-trigger" class="search-trigger" aria-label="搜索">
+    <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="8.5" cy="8.5" r="5.5"/><line x1="13" y1="13" x2="18" y2="18"/></svg>
+    <span class="t">搜索</span>
+    <span class="tip">Ctrl K</span>
+  </button>
+
+  <script>
+    (function () {
+      var root = document.documentElement;
+      if (matchMedia('(prefers-color-scheme: dark)').matches) root.classList.add('dark');
+      document.querySelectorAll('[data-theme-toggle]').forEach(function (b) {
+        b.addEventListener('click', function () { root.classList.toggle('dark'); });
+      });
+    })();
+  </script>
+</body>
+</html>

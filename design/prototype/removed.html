@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>王垠博客备份 — 原型 5/5 已移除文章阅读态（提案演示）</title>
+<link rel="stylesheet" href="shared.css">
+<style>
+  /* ==== 已移除阅读态专属：无新增组件，ArchiveBanner 见 shared.css；
+        「已移除」badge 复用 .badge；演示态横幅数据为示例（产品实现
+        由构建期根据源站 404 与 Git 历史生成） ==== */
+  .post-content pre { font-size: 13.5px; }
+</style>
+</head>
+<body>
+  <div class="proto-bar">
+    <span>原型 <span class="n">5/5</span> · 已移除文章阅读态（移除状态为演示数据）</span>
+    <button type="button" data-theme-toggle>◐ 亮 / 暗</button>
+  </div>
+
+  <div class="reading-progress" id="reading-progress" aria-hidden="true"></div>
+
+  <header class="site-header site-header--compact">
+    <div class="container">
+      <a class="site-logo site-logo--compact" href="index.html" aria-label="返回首页">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 2c1.85 0 3.55.63 4.9 1.69L14.3 8.8a4.97 4.97 0 0 0-4.6 0L7.1 5.69A7.96 7.96 0 0 1 12 4zM4 12c0-1.85.63-3.55 1.69-4.9L8.8 9.7a4.97 4.97 0 0 0 0 4.6l-3.11 2.6A7.96 7.96 0 0 1 4 12zm8 8c-1.85 0-3.55-.63-4.9-1.69l2.6-3.11a4.97 4.97 0 0 0 4.6 0l2.6 3.11A7.96 7.96 0 0 1 12 20zm6.31-3.1L15.2 14.3a4.97 4.97 0 0 0 0-4.6l3.11-2.6A7.96 7.96 0 0 1 20 12c0 1.85-.63 3.55-1.69 4.9z"/></svg>
+      </a>
+      <a class="site-title-link" href="index.html"><span class="site-title">王垠博客备份</span></a>
+    </div>
+  </header>
+
+  <main class="container">
+    <article class="post">
+      <!-- ArchiveBanner：诚实标注移除状态，保全说明 + Git 历史入口，不打断阅读 -->
+      <div class="archive-banner" role="status">
+        <div class="head">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6z"/></svg>
+          这篇文章已从原站移除
+        </div>
+        <p>2026-10-26 同步时发现源站已删除本文。本站依据 Git 提交历史保留当前副本，仅供免费阅读；如版权方要求可随时下架。</p>
+        <p><a href="https://github.com/turlamai/yinwang-archive/commits/master/posts/currying.md" target="_blank" rel="noopener">查看这篇文章的 Git 提交历史 →</a></p>
+      </div>
+
+      <header class="post-header">
+        <h1>Currying 的局限性</h1>
+        <div class="post-meta">
+          <span class="badge">已移除</span>
+          <span class="sep">&middot;</span>
+          <span>王垠</span>
+          <span class="sep">&middot;</span>
+          <time>2013-04-02</time>
+          <span class="sep">&middot;</span>
+          <a href="https://www.yinwang.org/posts/currying" target="_blank" rel="noopener">原文</a>
+        </div>
+      </header>
+
+      <div class="post-content">
+        <p>很多基于 lambda calculus 的程序语言，比如 ML 和 Haskell，都习惯用一种叫做 currying 的手法来表示函数。比如，如果你在 Haskell 里面这样写一个函数：</p>
+<pre><code>f x y = x + y</code></pre>
+        <p>然后你就可以这样把链表里的每个元素加上 2：</p>
+<pre><code>map (f 2) [1, 2, 3]</code></pre>
+        <p>它会输出 <code>[3, 4, 5]</code>。注意本来 <code>f</code> 需要两个参数才能算出结果，可是这里的 <code>(f 2)</code> 只给了 <code>f</code> 一个参数。这是因为 Haskell 的函数定义的缺省方式是“currying”。Currying 其实就是用“单参数”的函数，来模拟多参数的函数。比如，上面的 <code>f</code> 的定义在 Scheme 里面相当于：</p>
+<pre><code>(<span class="hljs-keyword">define</span> <span class="hljs-title">f</span>
+  (<span class="hljs-keyword">lambda</span> (x)
+    (<span class="hljs-keyword">lambda</span> (y)
+      (<span class="hljs-keyword">+</span> x y))))</code></pre>
+        <p>在这个例子里面，currying 貌似一个挺有用的东西，它让程序变得“简短”。如果不用 currying，你就需要制造另一个函数，写成这个样子：</p>
+<pre><code>map (\y-&gt;f 2 y) [1, 2, 3]</code></pre>
+        <p>这就是为什么 Haskell 和 ML 的程序员那么喜欢 currying。这个做法其实来源于最早的 lambda calculus 的设计。因为 lambda calculus 的函数都只有一个参数，所以为了能够表示多参数的函数，有一个叫 Haskell Curry 的数学家和逻辑学家，发明了这个方法。</p>
+        <p>不用 currying 的写法 <code>(\y-&gt;f 2 y)</code> 虽然比起 currying 的写法 <code>(f 2)</code> 长了那么一点，但是它有一点好。那就是你作为一个人（而不是机器），可以很清楚的从“\y-&gt;f 2 y”这个表达式，看到它的“用意”是什么。你会很清楚的看到：</p>
+        <blockquote>“f 本来是一个需要两个参数的函数。我们只给了它第一个参数 2。我们想要把 [1, 2, 3] 这个链表里的每一个元素，放进 f 的第二个参数 y，然后把 f 返回的结果一个一个的放进返回值的链表里。”</blockquote>
+        <p>仔细看看上面这段话说了什么吧，再来看看 <code>(f 2)</code> 是否表达了同样的意思？注意，我们现在的“重点”在于你，一个人，而不在于计算机。你仔细想，不要让思维的定势来影响你的判断。</p>
+        <p>你发现了吗？<code>(f 2)</code> 并不完全的含有 <code>\y-&gt;f 2 y</code> 所表达的内容。因为单从 <code>(f 2)</code> 这个表达式（不看它的定义），你看不到“f 总共需要几个参数”这一信息，你也看不到 (f 2) 会返回什么东西。</p>
+      </div>
+
+      <nav class="post-nav" aria-label="文章导航">
+        <a class="post-nav-item post-nav-older" href="#post-nav">
+          <span class="post-nav-label">&larr; 更早一篇</span>
+          <span class="post-nav-title">丘奇和图灵</span>
+        </a>
+        <a class="post-nav-item post-nav-newer" href="#post-nav">
+          <span class="post-nav-label">更新一篇 &rarr;</span>
+          <span class="post-nav-title">原因与证明</span>
+        </a>
+      </nav>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>内容版权归原作者所有 · 本站仅作备份存档</p>
+      <p class="footer-links">
+        <a href="#feed.xml">RSS</a>
+        <span class="sep">&middot;</span>
+        <a href="#wechat/">站长原创：公众号 TuringLambdaAI</a>
+        <span class="sep">&middot;</span>
+        <a href="#jrtx.site">全部产品</a>
+      </p>
+    </div>
+  </footer>
+
+  <button id="search-trigger" class="search-trigger" aria-label="搜索">
+    <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="8.5" cy="8.5" r="5.5"/><line x1="13" y1="13" x2="18" y2="18"/></svg>
+    <span class="t">搜索</span>
+    <span class="tip">Ctrl K</span>
+  </button>
+
+  <script>
+    (function () {
+      var root = document.documentElement;
+      if (matchMedia('(prefers-color-scheme: dark)').matches) root.classList.add('dark');
+      document.querySelectorAll('[data-theme-toggle]').forEach(function (b) {
+        b.addEventListener('click', function () { root.classList.toggle('dark'); });
+      });
+      var bar = document.getElementById('reading-progress');
+      var article = document.querySelector('.post');
+      if (bar && article) {
+        var update = function () {
+          var r = article.getBoundingClientRect();
+          var total = r.height - window.innerHeight;
+          var passed = Math.min(Math.max(-r.top, 0), Math.max(total, 1));
+          bar.style.width = (total > 0 ? passed / total * 100 : 100) + '%';
+        };
+        window.addEventListener('scroll', update, { passive: true });
+        window.addEventListener('resize', update, { passive: true });
+        update();
+      }
+    })();
+  </script>
+</body>
+</html>

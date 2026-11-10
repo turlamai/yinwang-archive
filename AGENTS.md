@@ -128,3 +128,10 @@ source: https://yinwang.org/posts/mites
 - 当前执行入口：[产品审查 issue](https://github.com/turlamai/yinwang-archive/issues/5)。保持免费内容维护：先验证来源/修订历史、链接/图片/代码渲染和失败抓取恢复。尊重既有阅读页与版权联系约定。
 - 开工先检查干净工作树与远端，以 fast-forward-only 更新并记录 SHA；共享文件一次一个写入者，保留其他 checkout 的未提交工作。
 - 每次只完成一个可验收切片，记录 owned files、依赖 pin、命令/平台/产物证据和回滚。已实现、已发布、实机验收分别陈述；不修改 requirements 或复用旧证据来制造通过。
+
+## 设计流程（原型先行）
+
+所有 UI 开发与界面改造一律先原型后代码：brief → `design/DESIGN.md`
+视觉契约 → HTML 原型 → 按 HIG 基准评审通过才开工；改界面先改原型再改
+代码。契约与原型放本仓 `design/`（尚未建立时随首个 UI 切片建立），
+实物截图验收后才能作为对外宣传素材。

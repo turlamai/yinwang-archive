@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>王垠博客备份 — 原型 3/5 搜索浮层</title>
+<link rel="stylesheet" href="shared.css">
+<style>
+  /* ==== 搜索浮层屏：背景为首页示意（压暗由 backdrop 承担），无新增组件 ==== */
+  .bg-dim { padding-bottom: 60px; }
+</style>
+</head>
+<body>
+  <div class="proto-bar">
+    <span>原型 <span class="n">3/5</span> · 搜索浮层（Ctrl/Cmd+K 开合，Esc 关闭）</span>
+    <button type="button" data-theme-toggle>◐ 亮 / 暗</button>
+  </div>
+
+  <!-- 背景：首页示意，仅用于承载浮层 -->
+  <header class="site-header site-header--compact">
+    <div class="container">
+      <a class="site-logo site-logo--compact" href="index.html" aria-label="返回首页">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 2c1.85 0 3.55.63 4.9 1.69L14.3 8.8a4.97 4.97 0 0 0-4.6 0L7.1 5.69A7.96 7.96 0 0 1 12 4zM4 12c0-1.85.63-3.55 1.69-4.9L8.8 9.7a4.97 4.97 0 0 0 0 4.6l-3.11 2.6A7.96 7.96 0 0 1 4 12zm8 8c-1.85 0-3.55-.63-4.9-1.69l2.6-3.11a4.97 4.97 0 0 0 4.6 0l2.6 3.11A7.96 7.96 0 0 1 12 20zm6.31-3.1L15.2 14.3a4.97 4.97 0 0 0 0-4.6l3.11-2.6A7.96 7.96 0 0 1 20 12c0 1.85-.63 3.55-1.69 4.9z"/></svg>
+      </a>
+      <a class="site-title-link" href="index.html"><span class="site-title">王垠博客备份</span></a>
+    </div>
+  </header>
+  <main class="container bg-dim">
+    <div class="post-card"><div class="post-card-title"><a href="post.html">我和螨虫的故事</a></div><div class="post-card-date">2026-07-15</div></div>
+    <div class="post-card"><div class="post-card-title"><a href="post.html">计算机科学视频班课程介绍</a></div><div class="post-card-date">2025-05-12</div></div>
+    <div class="post-card"><div class="post-card-title"><a href="post.html">Lisp 已死，Lisp 万岁！</a></div><div class="post-card-date">2013-03-26</div></div>
+  </main>
+
+  <!-- 浮层：实现由 Ctrl/Cmd+K 或右下 FAB 唤起；原型直接呈激活态 -->
+  <div id="search-overlay" class="search-overlay active">
+    <div class="search-backdrop" title="点击关闭"></div>
+    <div class="search-dialog" role="dialog" aria-label="搜索文章">
+      <div class="search-input-wrap">
+        <svg class="search-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="8.5" cy="8.5" r="5.5"/><line x1="13" y1="13" x2="18" y2="18"/></svg>
+        <input type="text" id="search-input" placeholder="搜索文章标题…" autocomplete="off" value="的" aria-label="搜索文章标题">
+        <kbd class="search-kbd">Esc</kbd>
+      </div>
+      <div id="search-results" class="search-results">
+        <div class="search-hint">输入关键词开始搜索</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* 原型专用：真实标题数据的即时过滤演示（产品实现读 /search.json，逻辑一致：
+       仅标题匹配、15 条上限、命中词 <mark> 高亮、输入态快捷键失效） */
+    (function () {
+      var root = document.documentElement;
+      if (matchMedia('(prefers-color-scheme: dark)').matches) root.classList.add('dark');
+      document.querySelectorAll('[data-theme-toggle]').forEach(function (b) {
+        b.addEventListener('click', function () { root.classList.toggle('dark'); });
+      });
+
+      var DATA = [
+        { title: '我和 Google 的故事（2012 年原版）', date: '2012-07-12' },
+        { title: 'Braid - 一个发人深思的游戏', date: '2013-03-04' },
+        { title: 'Oberon 操作系统：被忽略的珍宝', date: '2013-03-07' },
+        { title: '程序语言的常见设计错误(1) - 片面追求短小', date: '2013-03-15' },
+        { title: '论对东西的崇拜', date: '2013-03-24' },
+        { title: '函数式语言的宗教', date: '2013-03-31' },
+        { title: 'Hindley-Milner 类型系统的根本性错误', date: '2013-04-01' },
+        { title: 'Currying 的局限性', date: '2013-04-02' },
+        { title: 'Scheme 编程环境的设置', date: '2013-04-11' },
+        { title: '谈程序的“通用性”', date: '2013-04-13' },
+        { title: 'Markdown 的一些问题', date: '2013-04-14' },
+        { title: '一种新的操作系统设计', date: '2013-04-14' },
+        { title: '几个超炫的专业词汇', date: '2013-04-15' },
+        { title: '关于语言的思考', date: '2013-04-17' },
+        { title: '程序语言的常见设计错误(2) - 试图容纳世界', date: '2013-04-18' },
+        { title: '我和权威的故事', date: '2014-01-04' },
+        { title: '程序语言与它们的工具', date: '2014-02-04' },
+        { title: '程序员的心理疾病', date: '2014-02-09' },
+        { title: '一个对 Dijkstra 的采访视频', date: '2014-02-18' },
+        { title: '对 Go 语言的综合评价', date: '2014-04-18' }
+      ];
+      var input = document.getElementById('search-input');
+      var results = document.getElementById('search-results');
+      var esc = function (s) { return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); };
+
+      function render() {
+        var q = input.value.trim().toLowerCase();
+        if (!q) { results.innerHTML = '<div class="search-hint">输入关键词开始搜索</div>'; return; }
+        var matched = DATA.filter(function (p) { return p.title.toLowerCase().indexOf(q) !== -1; });
+        if (!matched.length) { results.innerHTML = '<div class="search-hint">没有找到「' + esc(q) + '」相关的文章</div>'; return; }
+        var html = '';
+        matched.slice(0, 15).forEach(function (p) {
+          var t = esc(p.title), idx = t.toLowerCase().indexOf(q);
+          if (idx !== -1) t = t.substring(0, idx) + '<mark>' + t.substring(idx, idx + q.length) + '</mark>' + t.substring(idx + q.length);
+          html += '<a href="post.html" class="search-result-item"><span class="search-result-title">' + t + '</span><span class="search-result-date">' + p.date + '</span></a>';
+        });
+        if (matched.length > 15) html += '<div class="search-hint">还有 ' + (matched.length - 15) + ' 篇相关文章</div>';
+        results.innerHTML = html;
+      }
+      input.addEventListener('input', render);
+      input.focus();
+      input.setSelectionRange(input.value.length, input.value.length);
+      render();
+    })();
+  </script>
+</body>
+</html>

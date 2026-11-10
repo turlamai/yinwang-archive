@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>王垠博客备份 — 原型 1/5 文章列表</title>
+<link rel="stylesheet" href="shared.css">
+<style>
+  /* ==== 首页专属（年份分组 + 分页，壳层组件见 shared.css） ==== */
+  .home { padding-bottom: 60px; }
+</style>
+</head>
+<body>
+  <!-- 原型评审工具条（非产品 UI） -->
+  <div class="proto-bar">
+    <span>原型 <span class="n">1/5</span> · 文章列表</span>
+    <button type="button" data-theme-toggle>◐ 亮 / 暗</button>
+  </div>
+
+  <header class="site-header">
+    <div class="container">
+      <div class="site-logo" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 2c1.85 0 3.55.63 4.9 1.69L14.3 8.8a4.97 4.97 0 0 0-4.6 0L7.1 5.69A7.96 7.96 0 0 1 12 4zM4 12c0-1.85.63-3.55 1.69-4.9L8.8 9.7a4.97 4.97 0 0 0 0 4.6l-3.11 2.6A7.96 7.96 0 0 1 4 12zm8 8c-1.85 0-3.55-.63-4.9-1.69l2.6-3.11a4.97 4.97 0 0 0 4.6 0l2.6 3.11A7.96 7.96 0 0 1 12 20zm6.31-3.1L15.2 14.3a4.97 4.97 0 0 0 0-4.6l3.11-2.6A7.96 7.96 0 0 1 20 12c0 1.85-.63 3.55-1.69 4.9z"/></svg>
+      </div>
+      <h1 class="site-title">王垠博客备份</h1>
+      <p class="site-desc">自动备份 <a href="https://yinwang.org">yinwang.org</a> 博客文章</p>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="home">
+      <p class="free-notice">免费阅读备份，版权归原作者；原文修订请以来源为准。 <a href="about.html">阅读与更正</a> · <a lang="en" href="about.html">About this archive</a></p>
+
+      <div class="year-section">
+        <div class="year-label">2026</div>
+        <div class="post-card"><div class="post-card-title"><a href="post.html">我和螨虫的故事</a></div><div class="post-card-date">2026-07-15</div></div>
+        <div class="post-card"><div class="post-card-title"><a href="post.html">如何彻底消灭家里的蚊子</a></div><div class="post-card-date">2026-07-10</div></div>
+      </div>
+
+      <div class="year-section">
+        <div class="year-label">2025</div>
+        <div class="post-card"><div class="post-card-title"><a href="post.html">计算机科学视频班课程介绍</a></div><div class="post-card-date">2025-05-12</div></div>
+      </div>
+
+      <div class="year-section">
+        <div class="year-label">2024</div>
+        <div class="post-card"><div class="post-card-title"><a href="post.html">计算机科学基础班第 5 期成功结束</a></div><div class="post-card-date">2024-05-03</div></div>
+      </div>
+
+      <div class="year-section">
+        <div class="year-label">2023</div>
+        <div class="post-card"><div class="post-card-title"><a href="post.html">计算机科学基础班（第5期，现实接轨班）招生</a></div><div class="post-card-date">2023-12-23</div></div>
+        <div class="post-card"><div class="post-card-title"><a href="post.html">根治脚气的简单方法</a></div><div class="post-card-date">2023-10-25</div></div>
+        <div class="post-card"><div class="post-card-title"><a href="post.html">空气清新剂的噩梦</a></div><div class="post-card-date">2023-02-03</div></div>
+      </div>
+
+      <div class="year-section">
+        <div class="year-label">2022</div>
+        <div class="post-card"><div class="post-card-title"><a href="post.html">continuation 和并发计算专项班</a></div><div class="post-card-date">2022-12-12</div></div>
+        <div class="post-card"><div class="post-card-title"><a href="post.html">计算机科学阅读班提供疫情特价</a></div><div class="post-card-date">2022-12-01</div></div>
+        <div class="post-card"><div class="post-card-title"><a href="post.html">计算机科学进阶班招生</a></div><div class="post-card-date">2022-02-22</div></div>
+        <div class="post-card"><div class="post-card-title"><a href="post.html">自然视力恢复法</a></div><div class="post-card-date">2022-02-22</div></div>
+        <div class="post-card"><div class="post-card-title"><a href="post.html">计算机科学阅读班招生说明</a></div><div class="post-card-date">2022-02-07</div></div>
+      </div>
+
+      <div class="year-section">
+        <div class="year-label">2021</div>
+        <div class="post-card"><div class="post-card-title"><a href="post.html">第一位“计算机科学少年班”学生毕业</a></div><div class="post-card-date">2021-09-16</div></div>
+        <div class="post-card"><div class="post-card-title"><a href="post.html">“超人类机器视觉”是不存在的</a></div><div class="post-card-date">2021-07-29</div></div>
+        <div class="post-card"><div class="post-card-title"><a href="post.html">『Ground-Up Computer Science』样章</a></div><div class="post-card-date">2021-05-11</div></div>
+        <div class="post-card"><div class="post-card-title"><a href="post.html">计算机科学基础班（第 4 期）报名</a></div><div class="post-card-date">2021-05-10</div></div>
+        <div class="post-card"><div class="post-card-title"><a href="post.html">大提琴为什么这么难学</a></div><div class="post-card-date">2021-04-16</div></div>
+        <div class="post-card"><div class="post-card-title"><a href="post.html">计算机科学阅读班（实验）</a></div><div class="post-card-date">2021-02-16</div></div>
+        <div class="post-card"><div class="post-card-title"><a href="post.html">计算机科学基础班（第三期）报名</a></div><div class="post-card-date">2021-02-15</div></div>
+      </div>
+
+      <nav class="pagination" aria-label="分页">
+        <a href="#page-2">下一页 &rarr;</a>
+      </nav>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>内容版权归原作者所有 · 本站仅作备份存档</p>
+      <p class="footer-links">
+        <a href="#feed.xml">RSS</a>
+        <span class="sep">&middot;</span>
+        <a href="#wechat/">站长原创：公众号 TuringLambdaAI</a>
+        <span class="sep">&middot;</span>
+        <a href="#jrtx.site">全部产品</a>
+      </p>
+    </div>
+  </footer>
+
+  <button id="search-trigger" class="search-trigger" aria-label="搜索">
+    <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="8.5" cy="8.5" r="5.5"/><line x1="13" y1="13" x2="18" y2="18"/></svg>
+    <span class="t">搜索</span>
+    <span class="tip">Ctrl K</span>
+  </button>
+
+  <script>
+    /* 原型专用：亮暗成对评审切换；首次加载尊重系统偏好（产品实现用 prefers-color-scheme 自动） */
+    (function () {
+      var root = document.documentElement;
+      if (matchMedia('(prefers-color-scheme: dark)').matches) root.classList.add('dark');
+      document.querySelectorAll('[data-theme-toggle]').forEach(function (b) {
+        b.addEventListener('click', function () { root.classList.toggle('dark'); });
+      });
+    })();
+  </script>
+</body>
+</html>
