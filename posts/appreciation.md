@@ -21,7 +21,7 @@ source: http://www.yinwang.org/blog-cn/2018/03/29/appreciation
 
 中国人最爱买宝马车，LV，爱马仕包包，原因很简单：因为它们贵。没有品位，没有鉴别欣赏能力，就只知道一个“贵”字。管它多丑呢，还搭配不好，贵就是好。LV 还有一个特点，那就是他们家的东西上面都密密麻麻印着“LV”字样，所以拿出去大家都知道你有 LV！可是我每次看到 LV 一类的东西，我就想起这个画面 :p
 
-![Pasted image 20260429163830.png](/images/appreciation/Pasted%20image%2020260429163830.png)
+![appreciation-01.png](/images/appreciation/appreciation-01.png)
 
 女人爱 LV，男人爱宝马，宝马就是中国男人装逼泡妹的神器。宝马车难开的一塌糊涂做工又糙，但人家是宝马啊 :p 不过现在宝马也有点过时了，现在他们的新宠是 Tesla。
 

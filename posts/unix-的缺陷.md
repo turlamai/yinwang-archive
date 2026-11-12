@@ -29,7 +29,7 @@ Unix 哲学的影响是多方面的。从命令行到程序语言，到数据库
 
 我们首先来分析一下 Linux 命令行的工作原理吧。下图是一个很简单的 Linux 命令运行的过程。当然这不是全过程，但是更具体的细节跟我现在要说的主题无关。
 
-![Pasted image 20231208144710.png](/images/unix-defects/Pasted%20image%2020231208144710.png)
+![unix-defects-01.png](/images/unix-defects/unix-defects-01.png)
 从上图我们可以看到，在 ls 命令运行的整个过程中，发生了如下的事情：
 
 1. shell（在这个例子里是 bash）从终端得到输入的字符串 `"ls -l *.c"`。然后 shell 以空白字符为界，切分这个字符串，得到`"ls"`，`"-l"` 和`"*.c"` 三个字符串。

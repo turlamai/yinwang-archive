@@ -934,4 +934,4 @@ if (found.isPresent()) {
 
 （这不是一篇免费的文章，如果你想把这些信息留在脑子里，请去这里[[付费]]。不然就请看这里：
 
-![Pasted image 20231212131156.png](/images/programming-wisdom/Pasted%20image%2020231212131156.png)
+![programming-wisdom-01.png](/images/programming-wisdom/programming-wisdom-01.png)

@@ -58,7 +58,7 @@ Visitor pattern 都不会写？还当什么黑客！这厮今天终于让我抓�
 
 RTFM = Read The Fucking Manual!
 
-![Pasted image 20231213092208.png](/images/hacker-culture/Pasted%20image%2020231213092208.png)
+![hacker-culture-01.png](/images/hacker-culture/hacker-culture-01.png)
 
 （图片来源：Abstruse Goose）
 

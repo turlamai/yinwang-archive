@@ -11,9 +11,9 @@ source: https://www.yinwang.org/blog-cn/2012/05/18/gtf
 
 Dan Friedman 是 Indiana 大学的教授，程序语言领域的创始人之一。他主要的著作《The Little Schemer》（前身叫《The Little Lisper》) 是程序语言界最具影响力的书籍之一。现在很多程序语言界的元老级人物，当年都是看这本“小人书”学会了 Lisp/Scheme，才决心进入这一领域。
 
-![Pasted image 20231212142738.png](/images/gtf/Pasted%20image%2020231212142738.png)
+![gtf-01.png](/images/gtf/gtf-01.png)
 
-![Pasted image 20231212142743.png](/images/gtf/Pasted%20image%2020231212142743.png)
+![gtf-02.png](/images/gtf/gtf-02.png)
 
 Friedman 对程序语言的理解可以说是世界的最高标准，很可惜的是，由于他个人的低调，他受到很多人的误解。很多人以为他只懂得 Scheme 这种“类型系统落后的语言”。有些人觉得他只顾自己玩，不求“上进”，觉得他的研究闭门造车，不“前沿”。我也误解过他，甚至在见面之前，根据这些书的封面，我断定他肯定是个年轻小伙。结果呢，第一次见到他的时候，他已经过了 60 岁大寿。
 
@@ -23,11 +23,11 @@ Friedman 对程序语言的理解可以说是世界的最高标准，很可惜�
 
 觉得 ML 比 Scheme 先进很多的人们应该看看 Friedman 这本书：The Little MLer：
 
-![Pasted image 20231212142757.png](/images/gtf/Pasted%20image%2020231212142757.png)
+![gtf-03.png](/images/gtf/gtf-03.png)
 
 想要真正理解 Java 设计模式的人可以看看这本：A Little Java, A Few Patterns:
 
-![Pasted image 20231212142809.png](/images/gtf/Pasted%20image%2020231212142809.png)
+![gtf-04.png](/images/gtf/gtf-04.png)
 
 这些东西的优点和弱点仿佛在他心里都有数，他几乎总是指向正确的前进方向。
 

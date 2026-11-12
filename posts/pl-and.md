@@ -11,7 +11,7 @@ source: https://www.yinwang.org/blog-cn/2014/01/25/pl-and
 
 ## 程序语言与微波炉
 
-![Pasted image 20231213094103.png](/images/pl-and/Pasted%20image%2020231213094103.png)
+![pl-and-01.png](/images/pl-and/pl-and-01.png)
 
 有的程序语言就像左边的，现在中国市场上流行的微波炉。布满了花哨的一年都用不到一次的专用菜单，却连最基本的 0-9 数字键都没有。输入个时间都要费脑筋组合一下，按键位置不顺手，不能一次按到位，而且还不能达到需要的精度。
 
@@ -25,7 +25,7 @@ source: https://www.yinwang.org/blog-cn/2014/01/25/pl-and
 
 ## 程序语言与减肥
 
-![Pasted image 20231213094142.png](/images/pl-and/Pasted%20image%2020231213094142.png)
+![pl-and-02.png](/images/pl-and/pl-and-02.png)
 
 很多人都想减肥，就像很多人都想学会编程。姑且不说一味的减肥好不好，现在只谈一下什么是有效的减肥方法。
 
@@ -39,7 +39,7 @@ source: https://www.yinwang.org/blog-cn/2014/01/25/pl-and
 
 ## 程序语言与棋
 
-![Pasted image 20231213094210.png](/images/pl-and/Pasted%20image%2020231213094210.png)
+![pl-and-03.png](/images/pl-and/pl-and-03.png)
 
 有人说好的程序语言就像国际象棋（chess），在了解简单的规则之后，你就可以用它们组合出变幻无穷的棋局。而我认为，好的程序语言应该像国际象棋去掉像“王车易位”（castling）一类[复杂古怪的规则](https://en.wikipedia.org/wiki/Castling)。实际上，好的程序语言会更加近似于中国象棋，而不是国际象棋。中国象棋只有一条规则比较特殊—“蹩脚马”，可是它其实很直观，容易理解。其它的规则，比如兵卒过河才能横行，几乎都画在棋盘上了。
 
@@ -52,7 +52,7 @@ source: https://www.yinwang.org/blog-cn/2014/01/25/pl-and
 
 另外换位的时候王和车不是直接互换位置那么简单，而是这样的路线：
 
-![Pasted image 20231213094211.gif](/images/pl-and/Pasted%20image%2020231213094211.gif)
+![pl-and-04.gif](/images/pl-and/pl-and-04.gif)
 
 一条这样的特殊规则就够伤脑筋了，据我所知国际象棋还有至少其它两条类似的规则。它们跟其他的规则组合在一起的时候就产生了组合爆炸效应，你发现每走一步，甚至貌似无关的动作都得检查它们是否会出现。你不得不随时把这么复杂的规则放在脑子里。没事找事也不要找这么麻烦的事啊。
 
@@ -70,7 +70,7 @@ source: https://www.yinwang.org/blog-cn/2014/01/25/pl-and
 
 ## 程序语言与音乐
 
-![Pasted image 20231213094439.png](/images/pl-and/Pasted%20image%2020231213094439.png)
+![pl-and-05.png](/images/pl-and/pl-and-05.png)
 
 程序语言就像音乐。当听过很好的音乐之后，你会自然而然的厌倦以前曾经喜欢过，为之疯狂过的那些，觉得它们很无趣，甚至很惊讶自己以前怎么会喜欢它们。当有人问你为什么不喜欢他们推荐给你的音乐，你却说不出来。你只是自然而然觉得太单调，不入耳，不对劲，甚至扰乱你美好的心情。你的判断完全是依靠声波对鼓膜的震动而引起的脑电波的起伏，而不带有任何的成见。完全根据这音乐自己，而不需要知道它的作者是谁。就像玩过像《Braid》之类的游戏之后，你再也不想玩像《生化危机》那种搞不清楚到底是自己在玩游戏还是游戏在玩自己的。你的脑子里有一种对“趣味”的新定义，但是你却说不出来它到底是怎么回事。
 
@@ -82,7 +82,7 @@ source: https://www.yinwang.org/blog-cn/2014/01/25/pl-and
 
 ## 程序语言与武器
 
-![Pasted image 20231213094509.png](/images/pl-and/Pasted%20image%2020231213094509.png)
+![pl-and-06.png](/images/pl-and/pl-and-06.png)
 
 前段时间 AK-47 的设计者 [Kalashnikov](https://en.wikipedia.org/wiki/Mikhail_Kalashnikov) 去世的时候，我从一篇文章了解到他设计 [AK-47 的故事](https://weaponsman.com/5-reasons-for-the-aks-legendary-reliability/)，发现 AK 跟我喜欢的程序语言设计有异曲同工之妙。
 
@@ -100,7 +100,7 @@ source: https://www.yinwang.org/blog-cn/2014/01/25/pl-and
 
 > AK 只有一个复杂一点的部件，那就是它的弹夹。弹夹的设计很大程度上影响到枪的整体性能，所以 Kalashnikov 在上面花了很多设计时间。
 
-![Pasted image 20231213094634.png](/images/pl-and/Pasted%20image%2020231213094634.png)
+![pl-and-07.png](/images/pl-and/pl-and-07.png)
 
 这个工程经验其实对于程序语言的设计者有启发意义，因为弹夹与枪主体的接口，和程序语言的函数接口很类似。Tony Hoare 在他的《[给程序语言设计的建议](https://people.eecs.berkeley.edu/~necula/cs263_sp14/handouts/hoarehints.pdf)》中也提到，函数的调用必须简单而且快速，因为调用的开销会累积起来形成很大的性能问题。可惜的是很多语言没有注意到这个问题，函数调用时总是有一堆的动态检查和重载要做，很大程度的影响了它们的性能。
 
