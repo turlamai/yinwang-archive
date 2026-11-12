@@ -60,7 +60,7 @@ COBOL 在那么靠前的位置我觉得是用来搞笑的，不过你大致看�
 对于这种现象有一个专门的词汇，叫做 RTFM（Read The Fucking Manual）：
 
 <a href="http://abstrusegoose.com/227">
-<img src="/images/programmer-mental/the_fucking_manual.png" width="60%"></a>
+<img src="/images/programmer-mental/the-fucking-manual.png" width="60%"></a>
 
 在 IRC 的聊天室里，由于隔着网络的屏障，这种对提问者没礼貌的现象就更加嚣张。我曾经有几次去 Java 的聊天室问一些貌似基础，而其实很深入的语言设计问题，结果没有一次不是以收到像“去读 API ！”这样的回答而结束。 API 谁不会读，然而我需要的是一个有血有肉的人对此的理解。所以后来我根本不去 IRC 这种地方了，因为那里面对你打字的基本上已经不是人类了。他们觉得你问问题浪费了他们的时间，好像他们一天到晚泡在 IRC 里面就是在做什么正事似的。不想回答问题，不开口还不行吗。后来你发现，原来在 IRC 里面训斥新手就是这些人唯一的乐趣，所以其实他们是非开口说话不可的。然而这次他们遇到的却不是个新手，而是一个可以把 Java 整个造出来的人。
 
@@ -69,7 +69,7 @@ COBOL 在那么靠前的位置我觉得是用来搞笑的，不过你大致看�
 不得不指出，《提问的艺术》等介绍“黑客文化”的文章对于这种现象的出现有着极大的责任。说穿了，写这些文章的人一般都是 Unix 的跟屁虫。这种文章试图抹去人类文明几千年来传承的文化，而重新给“礼貌”做出定义。其结果是，人类的文明因为这些文章，在程序员的世界里倒退了几十甚至几百年。很多外行人人不喜欢跟程序员说话，叫他们是 nerd ，就是这个原因。
 
 <a href="http://abstrusegoose.com/416">
-<img src="/images/programmer-mental/the_DARPA_conspiracy.png" width="90%"></a>
+<img src="/images/programmer-mental/the-DARPA-conspiracy.png" width="90%"></a>
 
 ## 不要提问，不要谦虚，不要恭维
 

@@ -19,7 +19,7 @@ source: https://www.yinwang.org/posts/machine-vs-human-2
 
 用了千万张图片和几个星期的计算，拟合出来的函数也不是那么可靠。人们已经发现用一些办法生成奇怪的图片，能让最先进的深度神经网络输出[完全错误的结果](http://www.evolvingai.org/fooling)。
 
-<img src="/images/machine-vs-human-2/diversity_40_images_label.jpg" width="60%">
+<img src="/images/machine-vs-human-2/diversity-40-images-label.jpg" width="60%">
 
 （图片来源：[http://www.evolvingai.org/fooling](http://www.evolvingai.org/fooling)）
 

@@ -38,7 +38,7 @@ ydiff 里面含有一些比较独特的技术。
 
 由于这个原因，很多人的 parser 都是自己手写的。可是手写 parser 相当的费事，而且不模块化。所以函数式语言的社区就出现了 [Parsec](http://www.haskell.org/haskellwiki/Parsec) 这样的“parser combinator library”。它的原理是，每一个 parser 都是一个函数，它接受一个字符串，输出一种特定的 AST 结构。比如你可以写出一个很简单的 parser，它只能从字符串里提取一个变量，或者一个数字。由于函数式语言可以把函数作为数据，这种小的 parser 可以被一些叫做 parser combinator 的“高阶函数”作为输入，然后把它们“组合”在一起，形成更大的 parser。当所有这些 parser 组合在一起，它们就可以拥有分析整个程序文本的威力，就像“组合金刚大力神”一样。 
 
-![devastator_tf2.jpg](/images/ydiff/devastator_tf2.jpg)
+![devastator-tf2.jpg](/images/ydiff/devastator-tf2.jpg)
 
 我的 parser 库就是受到了 Parsec 的启发。然而我的库在某种程度上比 parsec 还好用。它不但更加简单灵活，而且能够检测并且报告“左递归”的位置。这是 Parsec 没有的功能。另外，我的 parser 库里面含有很方便的宏，使得写 parser 就像写 BNF 范式一样简单，但却又不需要使用像 YACC 一样的麻烦的工具。
 
