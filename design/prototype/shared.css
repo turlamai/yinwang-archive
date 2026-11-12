@@ -1,5 +1,5 @@
 /* ==== 王垠博客备份 原型共享壳层 — tokens 与基础组件，见 design/DESIGN.md ====
-   Tokens 逐值提取自 src/site/styles/main.css（家族 site-kit palette）。
+   Tokens 逐值提取自 assets/site/styles/main.css（家族 site-kit palette）。
    原型禁外部资源：serif 标题以系统宋体栈代替自托管 Newsreader；
    实物高亮由 vendor highlight.js 浏览器端执行，原型用静态 span 演示。 */
 :root {

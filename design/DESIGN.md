@@ -1,7 +1,7 @@
 # Yinwang Blog Archive DESIGN.md — 视觉与交互契约（单一真源）
 
-原型（`design/prototype/`）与站点实现（`src/site/styles/main.css`、`yinwang-archive/site.rkt` 模板）都遵循本文件；改视觉先改这里，再同步实现。
-Tokens 逐值提取自 `src/site/styles/main.css` 现行值（家族 site-kit 调色板：一支 terracotta accent 贯穿 jrtx.site 全线），保证原型 → Racket 站点生成零翻译成本。
+原型（`design/prototype/`）与站点实现（`assets/site/styles/main.css`、`yinwang-archive/site.rkt` 模板）都遵循本文件；改视觉先改这里，再同步实现。
+Tokens 逐值提取自 `assets/site/styles/main.css` 现行值（家族 site-kit 调色板：一支 terracotta accent 贯穿 jrtx.site 全线），保证原型 → Racket 站点生成零翻译成本。
 
 ## Brief（2026-11-11）
 
@@ -20,7 +20,7 @@ Tokens 逐值提取自 `src/site/styles/main.css` 现行值（家族 site-kit �
 - **防错一致**：Esc 永远关闭浮层；外链一律 `target="_blank" rel="noopener"`；键盘 ←/→ 切换上下篇不与输入框冲突（输入焦点时失效）。
 - **层级克制**：bg（画布）< surface（卡片/浮层）两层 + 1px border 分隔；唯一阴影是卡片 hover 与浮层投影；accent（terracotta）只给链接、交互反馈与状态，禁大面积色块。
 
-## Tokens（与 `src/site/styles/main.css` 1:1）
+## Tokens（与 `assets/site/styles/main.css` 1:1）
 
 | Token | Light | Dark | 用途 |
 |---|---|---|---|

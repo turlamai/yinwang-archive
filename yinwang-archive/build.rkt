@@ -3,7 +3,7 @@
 ;; Static site builder — replaces the Eleventy build (npm run build).
 ;; Output layout matches the historical dist/: /posts/{slug}/ pages,
 ;; paginated home (50/page), feed.xml, search.json, sitemap.xml,
-;; llms.txt, plus copied assets from src/site and images/.
+;; llms.txt, plus copied assets from assets/site and images/.
 
 (require racket/path
          racket/string
@@ -84,7 +84,7 @@
   (define posts (load-posts root))
 
   ;; cache-bust the stylesheet URL by its content hash
-  (define css-file (build-path (site-src-dir root) "styles" "main.css"))
+  (define css-file (build-path (site-assets-dir root) "styles" "main.css"))
   (define css-hash
     (substring (sha1 (open-input-bytes (file->bytes css-file))) 0 10))
 
@@ -118,7 +118,7 @@
             (length posts) total-pages out))
 
   ;; assets
-  (define src (site-src-dir root))
+  (define src (site-assets-dir root))
   (for ([item (in-list '("favicon.svg" "robots.txt" "CNAME" "wechat-qr.jpg"))])
     (define f (build-path src item))
     (when (file-exists? f)

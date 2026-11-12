@@ -46,7 +46,7 @@ raco yinwang-archive notify [--root DIR]            # 新文章邮件（缺省 d
 - `format.rkt`：自愈链本体，`lint.rkt`/`fixers.rkt` 与其共享（lint 把 transform 输出与原文比较判损伤）
 - `render.rkt`：Markdown → HTML。用 catalog 的 `markdown` 包解析 + 后处理对齐历史 markdown-it 行为：锚点 slugify（trim/lowercase/空白→`-`，重名加 `-1`）、figure div 还原为裸 img、`brush:` class 换 `language-x`、`**粗体**` 预转 `<strong>`（解析器对 CJK 相邻粗体有 bug）、smart typography 实体解回 ASCII
 - `site.rkt`：全部页面模板（base/post/index/feed/search/sitemap/llms），浏览器端 JS（搜索/进度条/lightbox/TOC）原样保留——属合法薄壳层
-- `build.rkt`：dist 写出。分页 50 篇/页，资产从 `src/site/` 与 `images/` 拷贝
+- `build.rkt`：dist 写出。分页 50 篇/页，资产从 `assets/site/` 与 `images/` 拷贝
 - `notify.rkt`：git 未跟踪文件检测 + curl SMTP（Racket net/smtp 无 STARTTLS，smtp.qq.com 需要）
 - `util.rkt`：含 **正则方言 shim**（`ws-chars`/`nl-char`/`tick-char` 等）与 python 兼容 JSON 序列化器
 
@@ -107,7 +107,7 @@ source: https://yinwang.org/posts/mites
 
 - 样式表引用按**内容哈希**缓存指纹（`main.css?v=<sha1 前 10 位>`，`build.rkt` 算好经 `css-version` parameter 注入）——线上过 Cloudflare，改样式不改 URL 会拿到旧缓存（compact 头部对齐修复时踩过）
 
-- 代码高亮：构建期只输出 `<pre><code class="language-x">`，高亮由 vendor 的 highlight.js 在浏览器端执行（`src/site/vendor/highlight.min.js`，common bundle）——浏览器驻留 UI 薄壳层
+- 代码高亮：构建期只输出 `<pre><code class="language-x">`，高亮由 vendor 的 highlight.js 在浏览器端执行（`assets/site/vendor/highlight.min.js`，common bundle）——浏览器驻留 UI 薄壳层
 - 线上站（yinwang.jrtx.site）部署滞后于仓库时，正文对比会出现假差异；以 `posts/` 为准
 - 喂给 feed 的 `<updated>` 用最新 `created`（历史 Eleventy 用文件时间戳，在 CI 上每次构建都变，改为确定性值）
 

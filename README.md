@@ -29,7 +29,7 @@ yinwang-archive/
 ├── posts/           # Markdown articles (file name = URL slug)
 ├── images/          # Post images (organized by URL slug)
 ├── yinwang-archive/       # Racket package: crawler, formatter, linter, site builder
-├── src/site/        # Static assets (styles, favicon, vendored highlight.js)
+├── assets/site/     # Static assets (styles, favicon, vendored highlight.js)
 └── index.json       # Post metadata index
 ```
 

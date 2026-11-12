@@ -33,8 +33,8 @@
   (build-path root "images"))
 (define (index-file [root (current-directory)])
   (build-path root "index.json"))
-(define (site-src-dir [root (current-directory)])
-  (build-path root "src" "site"))
+(define (site-assets-dir [root (current-directory)])
+  (build-path root "assets" "site"))
 
 (define base-url "https://yinwang.org")
 (define site-name "王垠博客备份")

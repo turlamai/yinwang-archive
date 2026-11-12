@@ -1,6 +1,6 @@
 #lang racket/base
 
-;; Page templates — a port of src/site/*.njk. The browser-side JS
+;; Page templates — a port of assets/site/*.njk. The browser-side JS
 ;; (progress bar, lightbox, TOC, search) is thin UI and is kept verbatim;
 ;; highlight.js runs client-side from the vendored bundle.
 

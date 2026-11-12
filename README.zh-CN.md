@@ -29,7 +29,7 @@ yinwang-archive/
 ├── posts/           # Markdown 文章（文件名 = slug）
 ├── images/          # 文章图片（按 URL slug 分目录）
 ├── yinwang-archive/       # Racket 包：爬虫、格式化、校验、建站
-├── src/site/        # 静态资产（样式、favicon、自托管 highlight.js）
+├── assets/site/     # 静态资产（样式、favicon、自托管 highlight.js）
 └── index.json       # 文章元数据索引
 ```
 
