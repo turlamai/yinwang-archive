@@ -54,7 +54,7 @@ raco yinwang-archive notify [--root DIR]            # 新文章邮件（缺省 d
 
 - **文件名 = frontmatter 的 `slug`**（如 `mites.md`），与站点 URL（`/posts/{slug}/`）、图片目录（`images/{slug}/`）三统一
 - 中文标题只存在于 frontmatter 的 `title` 字段，不出现在文件名
-- 少数文章源站 slug 本身是中文（如 `论研究.md`），保持原样——文件名即 slug，URL 不变
+- **中文原题文件名是忠实存档的例外**（共 10 篇，如 `论研究.md`、`unix-的缺陷.md`）：这些文章源站 slug 本身是中文，保持原样落盘——文件名即 slug，站点 URL 沿用原中文名，不转写英文。存档忠实性优先于命名规范统一
 
 ## frontmatter
 
