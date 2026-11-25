@@ -60,7 +60,7 @@
             (if (>= attempt limit)
                 (raise e)
                 (begin
-                  (eprintf "  Transient crawl request error (attempt ~a/~a): ~a; retrying.\\n"
+                  (eprintf "  Transient crawl request error (attempt ~a/~a): ~a; retrying.\n"
                            attempt limit (exn-message e))
                   (pause (expt 2 (sub1 attempt)))
                   (loop (add1 attempt)))))])
@@ -72,18 +72,29 @@
               #:headers (hasheq 'User-Agent user-agent)
               #:timeouts timeouts))))
 
+(define (validate-page data skip)
+  (unless (hash? data) (error 'fetch-all-slugs "Expected JSON object"))
+  (define posts (jref data 'posts #f))
+  (define total (jref data 'total #f))
+  (unless (and (list? posts) (exact-nonnegative-integer? total)
+               (positive? total) (pair? posts)
+               (<= (+ skip (length posts)) total)
+               (andmap (λ (p) (and (hash? p) (string? (jref p 'slug #f))
+                                    (not (equal? (jref p 'slug) "")))) posts))
+    (error 'fetch-all-slugs "Invalid or incomplete post list at offset ~a" skip))
+  (values posts total))
+
 (define (fetch-all-slugs)
   (let loop ([skip 0] [acc '()])
     (define resp (api-get (format "~a/api/v1/posts?skip=~a&limit=20" base-url skip)))
     (unless (= (response-status-code resp) 200)
       (error 'fetch-all-slugs "API returned ~a" (response-status-code resp)))
     (define data (string->jsexpr (bytes->string/utf-8 (response-body resp))))
-    (define posts (jref data 'posts))
-    (define total (jref data 'total 0))
+    (define-values (posts total) (validate-page data skip))
     (printf "  Fetched ~a posts (skip=~a, total=~a)\n" (length posts) skip total)
     (define acc2 (append acc posts))
     (cond
-      [(or (>= (+ skip 20) total) (null? posts))
+      [(>= (+ skip (length posts)) total)
        ;; deduplicate by slug, keeping first occurrence
        (define seen (make-hash))
        (define unique
@@ -95,7 +106,7 @@
        unique]
       [else
        (sleep crawl-delay)
-       (loop (+ skip 20) acc2)])))
+       (loop (+ skip (length posts)) acc2)])))
 
 (define (fetch-post slug)
   (with-handlers ([exn:fail?
@@ -356,7 +367,6 @@
                          (append (crawl-state-failures st) failures)
                          (crawl-state-no-content-count st))])])))
 
-  (save-index! (crawl-state-entries final-state) root)
   (printf "\nDone! New: ~a, Updated: ~a, Skipped: ~a\n"
           (crawl-state-new-count final-state)
           (crawl-state-updated-count final-state)
@@ -370,6 +380,7 @@
     (error 'crawl
            "~a of ~a posts returned no content; the source API schema may have changed"
            no-content total))
+  (save-index! (crawl-state-entries final-state) root)
   0)
 
 ;; ---- CLI ----
@@ -381,6 +392,13 @@
 ;; transient exception still fails the scheduled workflow and preserves data.
 (module+ test
   (require rackunit)
+  (check-exn exn:fail? (λ () (validate-page (hasheq 'posts '() 'total 0) 0)))
+  (check-exn exn:fail? (λ () (validate-page (hasheq 'posts '() 'total 2) 1)))
+  (check-exn exn:fail? (λ () (validate-page (hasheq 'posts (list (hasheq)) 'total 1) 0)))
+  (define-values (valid-posts valid-total)
+    (validate-page (hasheq 'posts (list (hasheq 'slug "example")) 'total 1) 0))
+  (check-equal? valid-total 1)
+  (check-equal? (length valid-posts) 1)
   (define attempts 0)
   (define pauses '())
   (check-equal?
