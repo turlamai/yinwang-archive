@@ -71,6 +71,10 @@ raco yinwang-archive normalize-code [--check]              # indented code -> fe
 All commands accept `--root DIR` to operate on a checkout elsewhere than
 the current directory.
 
+## Offline integrity
+
+`posts/` is the authoritative archive. `index.json` is the historical collector index, not a complete catalog. At the retirement baseline there are 176 Markdown files and 130 collector entries; the 46 other files are retained without assuming why they are absent from the index. Run `racket yinwang-archive/archive-check.rkt` from the repository root to check filename/slug identity and missing indexed files. The check also verifies that rendered root-relative `/images/` references point to nonempty local files. It does not validate external resources, image decoding or source availability.
+
 ## Historical implementation (inactive collector)
 
 The collector is retained as historical source code, not a recommended operation. Do not resume automated collection without a new maintainer decision and respect for the source owner's access policy.
@@ -120,3 +124,7 @@ the archived posts remain copyrighted by their author — see [LICENSE](LICENSE)
 ## Copyright
 
 All archived posts are copyrighted by their original author. No content is sold or relicensed. See the [correction and removal process](docs/READING.md).
+
+### Known historical gaps
+
+Ten diagrams in the computer-science article are absent from the stored image directory and its queried Git path history. The generated reading page labels those gaps; the original Markdown remains unchanged. CI reports the exact known gaps and rejects new missing references or stale gap entries. No images are fetched or fabricated.
