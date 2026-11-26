@@ -1,5 +1,7 @@
 # 项目概述
 
+**2026-11-26 站长决定：退出活跃产品组合，停止所有自动采集与推广，仅维护历史快照、离线构建和版权更正/下架。以下采集实现说明仅供历史参考，不得恢复定时或手动抓取工作流。**
+
 ## Commercial authorization decision
 
 Decision `2026-10-auth-1`: this remains a free content/community project. Do not add Permit commercial credentials, Commerce checkout, licensing accounts or a content paywall. Preserve source attribution, existing licenses and reader recovery/correction paths. Read the [portfolio authorization map](https://github.com/turlamai/turlamai.github.io/blob/master/PORTFOLIO.md#authorization-integration-map) at each new slice and record the source/policy SHAs actually read; an updated file is not an acknowledgement by an already running agent.
@@ -114,7 +116,7 @@ source: https://yinwang.org/posts/mites
 ## CI
 
 - `ci.yml`：ubuntu + macos 双机跑 raco test / lint / build（push + PR）
-- `crawl.yml`：每周一 UTC 03:00 爬取 + lint + notify + 自动 commit
+- 原 `crawl.yml` 已删除；不再自动抓取或通知。
 - `deploy.yml`：push 到 main/master 构建 dist 部署 GH Pages
 - 配方：`Bogdanp/setup-racket` → `raco pkg install --auto --no-docs markdown http-easy-lib` → `raco pkg install --auto --no-docs --link "$(pwd)"`
 

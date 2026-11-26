@@ -1,6 +1,6 @@
 # InkVault
 
-王垠博客（[yinwang.org](https://yinwang.org)）文章自动备份。通过 GitHub Actions 每周自动爬取，将所有博文保存为 Markdown 文件并下载图片。已删除的文章通过 Git 历史保留。
+王垠博客（[yinwang.org](https://yinwang.org)）历史存档。站长于 2026-11-26 决定停止自动采集，仅保留既有资料。本项目不是实时镜像或作者官方网站。
 
 ![Racket](https://img.shields.io/badge/Racket-9E3E97?logo=racket&logoColor=white) [![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
@@ -10,13 +10,12 @@
 
 [阅读 InkVault（王垠博客存档）](https://yinwang.jrtx.site/) · [阅读、隐私与更正](docs/READING.zh-CN.md)
 
-这是免费阅读备份，不是作者官方网站。每周抓取属于计划任务，不保证成功，失败时可能保留旧副本。排版、图片与代码可能与原文不同，Git 历史可保留旧修订。不增加付费内容或广告。
+这是免费阅读备份，不是作者官方网站。已停用定时及手动抓取工作流；存档可能不是最新版本。排版、图片与代码可能与原文不同，Git 历史可保留旧修订。不增加付费内容或广告。
 
 ## 功能特性
 
 - **Racket 全栈** — 爬虫、校验器、静态站生成器同属一个 Racket 包（`raco yinwang-archive …`）
-- **每周自动爬取** — 通过 GitHub Actions 执行（每周一 UTC 03:00）
-- **增量更新** — 仅下载新增或修改的文章
+- **历史快照** — 仅使用本地既有文章重建站点，不请求源站
 - **完整内容归档** — 文章保存为 Markdown，图片下载到本地
 - **自包含 Markdown** — 文件名 = URL slug，中文标题存 frontmatter，正文以 H1 标题开始
 - **自动去重** — 通过 source URL 跟踪，避免重复文件
@@ -55,12 +54,6 @@ raco pkg install --auto --no-docs --link "$(pwd)"
 ### 3. 运行管线
 
 ```bash
-# 增量爬取（仅新增/更新的文章）
-raco yinwang-archive crawl
-
-# 强制重新下载所有文章
-raco yinwang-archive crawl --force
-
 # 全量校验（CI 门禁）
 raco yinwang-archive lint
 
@@ -73,12 +66,13 @@ raco yinwang-archive build
 ```bash
 raco yinwang-archive fix-bold-spacing [--check|--dry-run]  # 修复 `** 文字 **` 坏强调
 raco yinwang-archive normalize-code [--check]              # 顶层缩进代码转围栏
-raco yinwang-archive notify                                # 新文章邮件提醒（缺省 dry-run）
 ```
 
 所有命令支持 `--root DIR`，可在任意目录对指定检出操作。
 
-## 工作原理
+## 历史实现（采集器已停用）
+
+保留采集器作为历史源代码，不推荐运行。未经新的站长决定且未确认符合原作者访问策略，不得恢复自动采集。
 
 1. **获取文章列表** — 爬虫调用 `https://yinwang.org/api/v1/posts` 接口，通过分页参数（`skip`/`limit`）获取所有文章 slug。
 2. **去重检查** — 根据已有的 `source` URL 构建索引，避免生成重复文件。
@@ -111,19 +105,6 @@ source: https://yinwang.org/posts/my-blog-post
 - 中文标题存于 frontmatter 的 `title` 字段；正文以 H1 标题开始
 - 大节用 H2；爬虫会自动规范化标题层级与代码围栏
 
-## 新文章提醒（可选）
-
-每周爬取发现新文章时，工作流可给你发一封摘要邮件，方便你决定是否分享到公众号。通过仓库 Secrets 配置（Settings → Secrets and variables → Actions）：
-
-| Secret      | 值                                          |
-| ----------- | ------------------------------------------- |
-| `SMTP_HOST` | 如 `smtp.qq.com`                            |
-| `SMTP_USER` | 发件账号，如 `you@qq.com`                    |
-| `SMTP_PASS` | SMTP 授权码（非登录密码）                    |
-| `NOTIFY_TO` | 收件地址，通常与发件账号相同                  |
-
-未配置时该步骤仅本地输出，无副作用。邮件经 `curl` 的 SMTP 客户端发送（STARTTLS），需 `PATH` 上有 `curl`。
-
 ## RSS
 
 站点提供 Atom 订阅：`/feed.xml`（最新 20 篇，标题 + 链接 + 简短摘要）。有意不输出全文——内容归原作者所有。
@@ -134,4 +115,4 @@ source: https://yinwang.org/posts/my-blog-post
 
 ## 版权
 
-本站为备份存档，仅供阅读便利，不销售任何文章内容，文章版权归原作者所有。
+本站仅作历史留存，不销售或重新许可文章，版权归原作者所有。参见[更正与下架流程](docs/READING.zh-CN.md)。

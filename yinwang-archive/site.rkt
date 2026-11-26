@@ -20,7 +20,7 @@
 (define umami-id "38c4a1f4-0780-448e-a6f3-2e614c245585")
 
 (define default-description
-  "王垠博客文章备份与检索，按计划同步 yinwang.org，版权归原作者所有")
+  "王垠博客文章备份与检索，历史存档（已停止同步），版权归原作者所有")
 
 ;; Content hash of main.css, set by build.rkt so every deploy gets a
 ;; fresh stylesheet URL (Cloudflare/GH Pages would otherwise serve a
@@ -241,7 +241,7 @@ SCRIPT
         "            " site-logo-svg "\n"
         "          </div>\n"
         (format "          <h1 class=\"site-title\">~a</h1>\n" (html-escape site-name))
-        "          <p class=\"site-desc\">自动备份 <a href=\"https://yinwang.org\">yinwang.org</a> 博客文章</p>\n"
+        "          <p class=\"site-desc\">历史存档 <a href=\"https://yinwang.org\">yinwang.org</a> 博客文章 · 已停止自动更新</p>\n"
         "        </div>\n"
         "      </header>\n"))
    "      <main class=\"container\">\n"
@@ -253,7 +253,7 @@ SCRIPT
    "          <p class=\"footer-links\">\n"
    "            <a href=\"/feed.xml\">RSS</a>\n"
    "            <span class=\"sep\">&middot;</span>\n"
-   "            <a href=\"/wechat/\">站长原创：公众号 TuringLambdaAI</a>\n"
+   "            <a href=\"https://github.com/turlamai/yinwang-archive/blob/master/docs/READING.zh-CN.md\">存档说明与版权更正</a>\n"
    "            <span class=\"sep\">&middot;</span>\n"
    "            <a href=\"https://jrtx.site/\">全部产品</a>\n"
    "          </p>\n"
@@ -425,7 +425,7 @@ SCRIPT
   (define content
     (string-append "<div class=\"home\">\n"
                    (if (zero? page-number)
-                       "<p class=\"post-card-date\">免费阅读备份，版权归原作者；原文修订请以来源为准。 <a href=\"https://github.com/turlamai/yinwang-archive/blob/master/docs/READING.zh-CN.md\">阅读与更正</a> · <a lang=\"en\" href=\"https://github.com/turlamai/yinwang-archive/blob/master/docs/READING.md\">About this archive</a></p>\n"
+                       "<p class=\"post-card-date\">历史存档 · 2026-11-26 起停止自动采集；版权归原作者，原文修订请以来源为准。 <a href=\"https://github.com/turlamai/yinwang-archive/blob/master/docs/READING.zh-CN.md\">阅读与更正</a> · <a lang=\"en\" href=\"https://github.com/turlamai/yinwang-archive/blob/master/docs/READING.md\">About this archive</a></p>\n"
                        "")
                    (string-append* cards)
                    pagination
@@ -472,7 +472,7 @@ SCRIPT
    "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"
    "<feed xmlns=\"http://www.w3.org/2005/Atom\">\n"
    (format "  <title>~a</title>\n" (html-escape site-name))
-   "  <subtitle>王垠博客自动备份存档，版权归原作者所有</subtitle>\n"
+   "  <subtitle>王垠博客历史存档，版权归原作者所有</subtitle>\n"
    (format "  <link href=\"~a/\" />\n" site-base-url)
    (format "  <link rel=\"self\" href=\"~a/feed.xml\" />\n" site-base-url)
    (format "  <updated>~a</updated>\n" (date-rfc3339 newest))
@@ -536,10 +536,10 @@ SCRIPT
 (define (llms-txt posts)
   (string-append
    (format "# ~a — 王垠博客存档\n\n" site-name)
-   "> 王垠（Yin Wang）博客 yinwang.org 的自动备份存档站。内容版权归原作者所有，本站仅作备份，不销售任何内容。文章为中文，主题涵盖编程语言、Lisp/Scheme、编译器、程序设计思想、人工智能等。\n\n"
+   "> 王垠（Yin Wang）博客 yinwang.org 的历史存档站。内容版权归原作者所有，本站仅作备份，不销售任何内容。文章为中文，主题涵盖编程语言、Lisp/Scheme、编译器、程序设计思想、人工智能等。\n\n"
    (format "站点：~a\n" site-base-url)
    (format "订阅：~a/feed.xml\n" site-base-url)
-   "更新：计划每周同步源站；失败时保留已有存档\n\n"
+   "状态：2026-11-26 起停止自动采集，仅保留历史快照\n\n"
    (format "## 文章索引（~a 篇，按时间倒序）\n" (length posts))
    (string-append*
     (for/list ([p (in-list posts)])
