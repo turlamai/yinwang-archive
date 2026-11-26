@@ -35,3 +35,8 @@
 (test-case "sitemap excludes retired promotion"
   (check-false (string-contains? (sitemap-xml (list post) 1) "/wechat/"))
   (check-true (string-contains? (sitemap-xml (list post) 1) "/posts/test/")))
+
+(test-case "search has labelled modal and explicit close action"
+  (define html (index-page (list post) 0 1))
+  (for ([fragment (in-list '("aria-modal=\"true\"" "id=\"search-close\"" "aria-label=\"搜索文章标题\"" "aria-live=\"polite\"" "token!==generation" "preventScroll:true"))])
+    (check-true (string-contains? html fragment))))

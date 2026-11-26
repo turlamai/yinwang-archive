@@ -34,13 +34,13 @@
   <!-- 浮层：实现由 Ctrl/Cmd+K 或右下 FAB 唤起；原型直接呈激活态 -->
   <div id="search-overlay" class="search-overlay active">
     <div class="search-backdrop" title="点击关闭"></div>
-    <div class="search-dialog" role="dialog" aria-label="搜索文章">
+    <div class="search-dialog" role="dialog" aria-modal="true" aria-label="搜索文章">
       <div class="search-input-wrap">
         <svg class="search-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="8.5" cy="8.5" r="5.5"/><line x1="13" y1="13" x2="18" y2="18"/></svg>
         <input type="text" id="search-input" placeholder="搜索文章标题…" autocomplete="off" value="的" aria-label="搜索文章标题">
-        <kbd class="search-kbd">Esc</kbd>
+        <button type="button" class="search-kbd" onclick="location.href='index.html'">关闭</button>
       </div>
-      <div id="search-results" class="search-results">
+      <div id="search-results" class="search-results" aria-live="polite">
         <div class="search-hint">输入关键词开始搜索</div>
       </div>
     </div>
