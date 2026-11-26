@@ -14,7 +14,7 @@ Free reading archive, not the author’s official website. Automated collection 
 
 ## Privacy and local data
 
-The generated site includes Umami analytics. Search is based on the generated search index; outbound original-source links leave the archive. Do not put private content in a public correction report.
+The generated site does not load third-party analytics. Search is based on the generated search index; outbound original-source links leave the archive. Do not put private content in a public correction report.
 
 ## Corrections, feedback and recovery
 

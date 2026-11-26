@@ -17,7 +17,6 @@
 
 ;; ---- constants (umami, from base.njk) ----
 
-(define umami-id "38c4a1f4-0780-448e-a6f3-2e614c245585")
 
 (define default-description
   "王垠博客文章备份与检索，历史存档（已停止同步），版权归原作者所有")
@@ -29,9 +28,7 @@
 
 ;; ---- shared snippets ----
 
-;; The site no longer runs ads: AdSense script, meta tag, floating
-;; sidebars, mobile slot and ads.txt were all removed. Reader funnel is
-;; the WeChat account (end-of-post follow card + /wechat/ page).
+;; Historical archive: no advertising, analytics or promotion.
 
 ;; ---- the two inline script blocks (verbatim from base.njk) ----
 
@@ -215,7 +212,6 @@ SCRIPT
    (format "  <link rel=\"canonical\" href=\"~a~a\">\n" site-base-url page-url)
    (format "  <link rel=\"alternate\" type=\"application/atom+xml\" title=\"~a\" href=\"/feed.xml\">\n"
            (html-escape-attr site-name))
-   (format "  <script defer src=\"https://cloud.umami.is/script.js\" data-website-id=\"~a\"></script>\n" umami-id)
    "  <script defer src=\"/vendor/highlight.min.js\"></script>\n"
    "  <script defer src=\"/vendor/lisp.min.js\"></script>\n"
    "  <script defer src=\"/vendor/scheme.min.js\"></script>\n"
@@ -254,8 +250,6 @@ SCRIPT
    "            <a href=\"/feed.xml\">RSS</a>\n"
    "            <span class=\"sep\">&middot;</span>\n"
    "            <a href=\"https://github.com/turlamai/yinwang-archive/blob/master/docs/READING.zh-CN.md\">存档说明与版权更正</a>\n"
-   "            <span class=\"sep\">&middot;</span>\n"
-   "            <a href=\"https://jrtx.site/\">全部产品</a>\n"
    "          </p>\n"
    "        </div>\n"
    "      </footer>\n"
@@ -290,35 +284,6 @@ SCRIPT
    search-script "\n"
    "</body>\n"
    "</html>\n"))
-
-;; ---- wechat page (公众号专页 /wechat/) ----
-
-;; The only conversion surfaces are this page and the footer link —
-;; reading experience comes first, no funnel elements inside posts.
-(define (wechat-page)
-  (define content
-    (string-append
-     "<article class=\"post\">\n"
-     "  <header class=\"post-header\">\n"
-     "    <h1>站长的微信公众号</h1>\n"
-     "    <div class=\"post-meta\">\n"
-     "      <span>TuringLambdaAI</span>\n"
-     "    </div>\n"
-     "  </header>\n"
-     "  <div class=\"post-content\">\n"
-     "    <p>站长是汽车嵌入式工程师，方向 AUTOSAR、CAN/UDS 与 gPTP 时间同步；业余用 Racket 写 macOS、Windows、Linux 上的原生桌面应用。</p>\n"
-     "    <p>微信公众号 <strong>TuringLambdaAI</strong> 发布他的中文原创内容：汽车电子与嵌入式开发、AI 工作流，以及独立开发中的工程实践。本站备份的王垠博客文章版权归原作者所有，公众号里的才是站长自己的写作。</p>\n"
-     "    <p>微信扫描下方二维码关注，或在微信中搜索「TuringLambdaAI」。</p>\n"
-     "    <p class=\"wechat-qr\">\n"
-     "      <img src=\"/wechat-qr.jpg\" alt=\"微信扫描二维码关注公众号 TuringLambdaAI\" width=\"320\" height=\"352\">\n"
-     "    </p>\n"
-     "  </div>\n"
-     "</article>"))
-  (base-page #:title "站长的微信公众号"
-             #:description "站长的微信公众号 TuringLambdaAI：中文的汽车电子、嵌入式与 AI 工作流原创内容，扫码或搜索关注"
-             #:compact-header #t
-             #:page-url "/wechat/"
-             content))
 
 ;; ---- post page (post.njk) ----
 
@@ -511,8 +476,7 @@ SCRIPT
 (define (sitemap-xml posts page-count)
   (define urls
     (append
-     (list (cons "/" #f)
-           (cons "/wechat/" #f))
+     (list (cons "/" #f))
      (for/list ([n (in-range 1 page-count)])
        (cons (page-url n) #f))
      (for/list ([p (in-list posts)])
