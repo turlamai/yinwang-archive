@@ -71,6 +71,10 @@ raco yinwang-archive normalize-code [--check]              # indented code -> fe
 All commands accept `--root DIR` to operate on a checkout elsewhere than
 the current directory.
 
+## Offline integrity
+
+`posts/` is the authoritative archive. `index.json` is the historical collector index, not a complete catalog. At the retirement baseline there are 176 Markdown files and 130 collector entries; the 46 other files are retained without assuming why they are absent from the index. Run `racket yinwang-archive/archive-check.rkt` from the repository root to check filename/slug identity and missing indexed files. This check is offline; it does not establish image completeness or source availability.
+
 ## Historical implementation (inactive collector)
 
 The collector is retained as historical source code, not a recommended operation. Do not resume automated collection without a new maintainer decision and respect for the source owner's access policy.

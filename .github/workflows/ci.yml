@@ -40,5 +40,8 @@ jobs:
       - name: Lint posts
         run: raco yinwang-archive lint
 
+      - name: Check offline archive integrity
+        run: racket yinwang-archive/archive-check.rkt
+
       - name: Build the site
         run: raco yinwang-archive build
