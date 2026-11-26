@@ -73,7 +73,7 @@ the current directory.
 
 ## Offline integrity
 
-`posts/` is the authoritative archive. `index.json` is the historical collector index, not a complete catalog. At the retirement baseline there are 176 Markdown files and 130 collector entries; the 46 other files are retained without assuming why they are absent from the index. Run `racket yinwang-archive/archive-check.rkt` from the repository root to check filename/slug identity and missing indexed files. This check is offline; it does not establish image completeness or source availability.
+`posts/` is the authoritative archive. `index.json` is the historical collector index, not a complete catalog. At the retirement baseline there are 176 Markdown files and 130 collector entries; the 46 other files are retained without assuming why they are absent from the index. Run `racket yinwang-archive/archive-check.rkt` from the repository root to check filename/slug identity and missing indexed files. The check also verifies that rendered root-relative `/images/` references point to nonempty local files. It does not validate external resources, image decoding or source availability.
 
 ## Historical implementation (inactive collector)
 

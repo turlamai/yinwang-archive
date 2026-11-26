@@ -72,7 +72,7 @@ raco yinwang-archive normalize-code [--check]              # 顶层缩进代码�
 
 ## 离线完整性
 
-`posts/` 是存档唯一内容来源，`index.json` 是历史采集索引而非完整目录。停更基线包含 176 个 Markdown 文件和 130 条采集索引；其余 46 篇保留，不推断缺失索引的原因。在仓库根目录执行 `racket yinwang-archive/archive-check.rkt` 校验文件名与 slug 的一致性，以及索引指向的文件是否缺失。检查完全离线，不证明图片完整性或源站可用性。
+`posts/` 是存档唯一内容来源，`index.json` 是历史采集索引而非完整目录。停更基线包含 176 个 Markdown 文件和 130 条采集索引；其余 46 篇保留，不推断缺失索引的原因。在仓库根目录执行 `racket yinwang-archive/archive-check.rkt` 校验文件名与 slug 的一致性，以及索引指向的文件是否缺失。同时检查渲染后的 `/images/` 本地图片引用是否指向非空文件。检查完全离线，不验证外部资源、图片解码或源站可用性。
 
 ## 历史实现（采集器已停用）
 

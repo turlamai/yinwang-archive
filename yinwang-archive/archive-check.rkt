@@ -3,8 +3,28 @@
 ;; Offline integrity check: local Markdown is authoritative; the old
 ;; collector index is only a historical subset. Never contacts the source.
 (require racket/file racket/path racket/string racket/list racket/dict
-         json "frontmatter.rkt" "util.rkt")
-(provide check-archive)
+         json net/uri-codec "frontmatter.rkt" "util.rkt" "build.rkt")
+(provide check-archive missing-local-images)
+
+;; The renderer emits quoted src attributes. Check root-relative archived
+;; images only, not external URLs or links embedded in article text.
+(define image-src-re
+  (pregexp (string-append "(?i:<img" ws-class "+[^>]*?" ws-class
+                         "+src=" "(?:\"(/images/[^\"#?]+)[^\"]*\"|'(/images/[^'#?]+)[^']*'))")))
+
+(define (missing-local-images root html)
+  (remove-duplicates
+   (for/list ([m (in-list (regexp-match* image-src-re html #:match-select values))]
+              #:do [(define url (or (cadr m) (and (>= (length m) 3) (caddr m))))
+                    (define decoded (uri-decode (string-replace url "&amp;" "&")))
+                    (define parts (string-split (substring decoded 1) "/" #:trim? #f))]
+              #:unless (and (andmap (lambda (p) (and (non-empty-string? p)
+                                                    (not (member p '("." "..")))
+                                                    (not (string-contains? p "\\"))))
+                                    parts)
+                            (let ([p (apply build-path root parts)])
+                              (and (file-exists? p) (positive? (file-size p))))))
+     url)))
 
 (define (check-archive root)
   (define paths
@@ -34,6 +54,9 @@
       (err! (format "~a: historical index points to missing article" slug))))
   (printf "Offline archive: ~a articles, ~a historical index entries\n"
           (length paths) (hash-count posts))
+  (for ([post (in-list (load-posts root))])
+    (for ([src (in-list (missing-local-images root (dict-ref post 'html)))])
+      (err! (format "~a: missing or empty local image ~a" (dict-ref post 'slug) src))))
   (reverse errors))
 
 (module+ main
