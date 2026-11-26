@@ -53,21 +53,46 @@
     update();
   }
 
-  /* ---- images: lazy load + lightbox ---- */
+  /* ---- images: lazy load + keyboard-accessible lightbox ---- */
   var lb=document.getElementById('lightbox');
   if(lb){
-    var lbImg=lb.querySelector('img');
-    var closeLb=function(){lb.classList.remove('active');lbImg.src='';lb.setAttribute('aria-hidden','true');document.body.style.overflow='';};
+    var lbImg=lb.querySelector('img'),lbClose=document.getElementById('lightbox-close');
+    var lbOpener=null,lbOverflow='';
+    function lbActive(){return lb.classList.contains('active');}
+    function closeLb(){
+      if(!lbActive())return;
+      lb.classList.remove('active');lbImg.removeAttribute('src');
+      document.body.style.overflow=lbOverflow;
+      if(lbOpener&&lbOpener.isConnected)lbOpener.focus({preventScroll:true});
+      lb.setAttribute('aria-hidden','true');lbOpener=null;
+    }
+    function openLb(img){
+      if(lbActive()||document.querySelector('.search-overlay.active'))return;
+      lbOpener=img;lbOverflow=document.body.style.overflow;
+      lbImg.src=img.currentSrc||img.src;lbImg.alt=img.alt||'';
+      lb.classList.add('active');lb.setAttribute('aria-hidden','false');
+      document.body.style.overflow='hidden';lbClose.focus({preventScroll:true});
+    }
     document.querySelectorAll('.post-content img').forEach(function(img){
       img.loading='lazy';img.decoding='async';
-      img.addEventListener('click',function(){
-        lbImg.src=img.currentSrc||img.src;lbImg.alt=img.alt||'';
-        lb.classList.add('active');lb.setAttribute('aria-hidden','false');
-        document.body.style.overflow='hidden';
+      if(img.closest('a,button'))return;
+      img.setAttribute('role','button');img.tabIndex=0;
+      img.setAttribute('aria-label',img.alt?'放大图片：'+img.alt:'放大图片');
+      img.addEventListener('click',function(){openLb(img);});
+      img.addEventListener('keydown',function(e){
+        if(e.key==='Enter'||e.key===' '){e.preventDefault();openLb(img);}
       });
     });
-    lb.addEventListener('click',closeLb);
-    document.addEventListener('keydown',function(e){if(e.key==='Escape'&&lb.classList.contains('active'))closeLb();});
+    lbClose.addEventListener('click',closeLb);
+    lb.addEventListener('click',function(e){if(e.target===lb)closeLb();});
+    document.addEventListener('keydown',function(e){
+      if(!lbActive())return;
+      if(e.key==='Escape'){e.preventDefault();closeLb();}
+      else if(e.key==='Tab'){e.preventDefault();lbClose.focus();}
+    });
+    document.addEventListener('focusin',function(e){
+      if(lbActive()&&!lb.contains(e.target))lbClose.focus();
+    });
   }
 
   /* ---- post TOC (progressive enhancement, built from anchored h2/h3) ---- */
@@ -301,7 +326,8 @@ SCRIPT
    "  </div>\n"
    "</div>\n"
    "\n"
-   "<div id=\"lightbox\" class=\"lightbox\" aria-hidden=\"true\">\n"
+   "<div id=\"lightbox\" class=\"lightbox\" role=\"dialog\" aria-modal=\"true\" aria-label=\"图片预览\" aria-hidden=\"true\">\n"
+   "  <button type=\"button\" id=\"lightbox-close\" class=\"lightbox-close\" aria-label=\"关闭图片预览\">关闭</button>\n"
    "  <img alt=\"\">\n"
    "</div>\n"
    "\n"

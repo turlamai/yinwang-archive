@@ -956,3 +956,9 @@ html { scroll-behavior: smooth; }
   font-weight: 500;
   letter-spacing: -0.01em;
 }
+
+/* Archive overlay controls: remain available on touch screens. */
+button.search-kbd { display: inline-block; cursor: pointer; min-height: 32px; color: var(--text); }
+.lightbox-close { position: absolute; top: 16px; right: 16px; min-height: 44px; padding: 8px 16px; border: 1px solid var(--border); border-radius: 8px; background: var(--surface); color: var(--text); cursor: pointer; }
+.lightbox-close:focus-visible, button.search-kbd:focus-visible, .post-content img[role='button']:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.lightbox img { cursor: default; max-height: calc(100vh - 120px); }

@@ -239,3 +239,7 @@ a:hover { color: var(--accent-hover); }
   .search-overlay { padding: 0; align-items: flex-start; justify-content: flex-start; }
   .search-dialog { max-width: 100%; border-radius: 0 0 16px 16px; }
 }
+
+/* Archive overlay controls: visible at every viewport width. */
+button.search-kbd { display: inline-block; cursor: pointer; min-height: 32px; color: var(--text); }
+.lightbox-close { position: absolute; top: 16px; right: 16px; padding: 8px 16px; border: 1px solid var(--border); border-radius: 8px; background: var(--surface); color: var(--text); cursor: pointer; }
