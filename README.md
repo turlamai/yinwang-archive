@@ -1,6 +1,6 @@
 # InkVault
 
-Auto-crawled archive of [yinwang.org](https://yinwang.org) blog posts by Wang Yin. The crawler runs weekly via GitHub Actions, saving every post as Markdown with images. Deleted articles are preserved through Git history.
+Historical snapshot of [yinwang.org](https://yinwang.org) by Wang Yin. Automated collection ended on 2026-11-26 by maintainer decision. This independent archive preserves existing material only; it is not a current mirror or an official website.
 
 ![Racket](https://img.shields.io/badge/Racket-9E3E97?logo=racket&logoColor=white) [![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
@@ -10,13 +10,12 @@ Auto-crawled archive of [yinwang.org](https://yinwang.org) blog posts by Wang Yi
 
 [Read the InkVault](https://yinwang.jrtx.site/) · [Reading, privacy and corrections](docs/READING.md)
 
-Free reading archive, not the author’s official website. Weekly crawling is scheduled rather than guaranteed; a failed crawl can leave an older copy. Formatting, images and code may differ from the original, and Git history can retain earlier revisions. No paid content or ads are added.
+Free reading archive, not the author’s official website. No scheduled or manual collection workflow remains. Archived copies may be outdated. Formatting, images and code may differ from the original, and Git history can retain earlier revisions. No paid content or ads are added.
 
 ## Features
 
 - **Racket full-stack** — crawler, linter and static site generator are one Racket package (`raco yinwang-archive …`)
-- **Automated weekly crawl** via GitHub Actions (every Monday at 03:00 UTC)
-- **Incremental updates** — only downloads new or modified posts
+- **Historical snapshot** — rebuild from existing local articles without fetching the source
 - **Full content archival** — posts saved as Markdown, images downloaded locally
 - **Self-contained Markdown** — file name = URL slug, Chinese title in frontmatter, body starts with an H1 heading
 - **Deduplication** — prevents duplicate files by tracking source URLs
@@ -55,12 +54,6 @@ raco pkg install --auto --no-docs --link "$(pwd)"
 ### 3. Run the pipeline
 
 ```bash
-# Incremental crawl (only new/updated posts)
-raco yinwang-archive crawl
-
-# Force re-download all posts
-raco yinwang-archive crawl --force
-
 # Validate all posts (CI gate)
 raco yinwang-archive lint
 
@@ -73,13 +66,14 @@ raco yinwang-archive build
 ```bash
 raco yinwang-archive fix-bold-spacing [--check|--dry-run]  # heal `** text **` emphasis
 raco yinwang-archive normalize-code [--check]              # indented code -> fences
-raco yinwang-archive notify                                # email new posts (dry-run default)
 ```
 
 All commands accept `--root DIR` to operate on a checkout elsewhere than
 the current directory.
 
-## How It Works
+## Historical implementation (inactive collector)
+
+The collector is retained as historical source code, not a recommended operation. Do not resume automated collection without a new maintainer decision and respect for the source owner's access policy.
 
 1. **Fetch post list** — the crawler calls `https://yinwang.org/api/v1/posts` with pagination (`skip`/`limit`) to get all post slugs.
 2. **Deduplicate** — it builds an index of existing posts by `source` URL to avoid duplicates.
@@ -112,22 +106,6 @@ Body text...
 - The Chinese title lives in frontmatter; the body starts with an H1 heading.
 - Top-level sections use H2; the crawler normalizes heading depth and code fences automatically.
 
-## Update Notifications (optional)
-
-When the weekly crawl finds new posts, the workflow can email you a
-summary so you can decide whether to share them. Configure via repo
-secrets (Settings → Secrets and variables → Actions):
-
-| Secret      | Value                                        |
-| ----------- | -------------------------------------------- |
-| `SMTP_HOST` | e.g. `smtp.qq.com`                           |
-| `SMTP_USER` | the from-account, e.g. `you@qq.com`          |
-| `SMTP_PASS` | SMTP authorization code (not login password) |
-| `NOTIFY_TO` | recipient, usually the same address          |
-
-Without the secrets the step is a harmless dry run. Delivery goes
-through `curl`'s SMTP client (STARTTLS), which must be on `PATH`.
-
 ## RSS
 
 The site publishes an Atom feed at `/feed.xml` (latest 20 posts, title +
@@ -141,5 +119,4 @@ the archived posts remain copyrighted by their author — see [LICENSE](LICENSE)
 
 ## Copyright
 
-All archived posts are copyrighted by their original author. This archive
-is kept for reading convenience; no content is sold or relicensed.
+All archived posts are copyrighted by their original author. No content is sold or relicensed. See the [correction and removal process](docs/READING.md).

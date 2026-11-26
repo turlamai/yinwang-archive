@@ -10,15 +10,15 @@ Browse the chronological index or search for a title. Each post links to its ori
 
 ## Free access and content status
 
-Free reading archive, not the author’s official website. Weekly crawling is scheduled rather than guaranteed; a failed crawl can leave an older copy. Formatting, images and code may differ from the original, and Git history can retain earlier revisions. No paid content or ads are added.
+Free reading archive, not the author’s official website. Automated collection stopped on 2026-11-26. This is a historical snapshot, not a live mirror. Formatting, images and code may differ from the original, and Git history can retain earlier revisions. No paid content or ads are added.
 
 ## Privacy and local data
 
-The generated site includes Umami analytics. Search is based on the generated search index; outbound original-source links leave the archive. Do not put private content in a public correction report.
+The generated site does not load third-party analytics. Search is based on the generated search index; outbound original-source links leave the archive. Do not put private content in a public correction report.
 
 ## Corrections, feedback and recovery
 
-For formatting, broken images or wrong source links, include the archive URL, original URL and a small description in Issues. Copyright/private identity material must not be posted publicly; a dedicated verified private contact is still a maintenance gap in #5. Maintainers back up posts/, images/ and index.json, run lint, then build without forcing a new crawl over repaired source files.
+For formatting, broken images or wrong source links, include the archive URL, original URL and a small description in Issues. Rights holders may request correction or removal through Issues using only the affected URL and requested action. Do not post private identity or copyright evidence publicly; a verified private contact remains to be established. Maintainers should remove confirmed requests from the site, search, feed and generated artifacts, and address repository history or caches where feasible. Do not promise permanent public retention. Maintainers back up posts/, images/ and index.json, run lint, then build without contacting the source.
 
 ## Licence and attribution
 
