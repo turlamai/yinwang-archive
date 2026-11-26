@@ -8,14 +8,20 @@
 
 ;; The renderer emits quoted src attributes. Check root-relative archived
 ;; images only, not external URLs or links embedded in article text.
-(define image-src-re
-  (pregexp (string-append "(?i:<img" ws-class "+[^>]*?" ws-class
-                         "+src=" "(?:\"(/images/[^\"#?]+)[^\"]*\"|'(/images/[^'#?]+)[^']*'))")))
+(define image-tag-re
+  (regexp (string-append "<img" ws-class "+[^>]*>")))
+(define image-src-double-re
+  (regexp (string-append ws-class "+src=\"(/images/[^\"#?]+)[^\"]*\"")))
+(define image-src-single-re
+  (regexp (string-append ws-class "+src='(/images/[^'#?]+)[^']*'")))
 
 (define (missing-local-images root html)
   (remove-duplicates
-   (for/list ([m (in-list (regexp-match* image-src-re html #:match-select values))]
-              #:do [(define url (or (cadr m) (and (>= (length m) 3) (caddr m))))
+   (for/list ([tag (in-list (regexp-match* image-tag-re html))]
+              #:do [(define m (or (regexp-match image-src-double-re tag)
+                                  (regexp-match image-src-single-re tag)))]
+              #:when m
+              #:do [(define url (cadr m))
                     (define decoded (uri-decode (string-replace url "&amp;" "&")))
                     (define parts (string-split (substring decoded 1) "/" #:trim? #f))]
               #:unless (and (andmap (lambda (p) (and (non-empty-string? p)
