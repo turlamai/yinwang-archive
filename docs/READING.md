@@ -1,4 +1,4 @@
-# Read the Yinwang Blog Archive
+# Read the InkVault
 
 **English** · [简体中文](READING.zh-CN.md)
 

@@ -1,4 +1,4 @@
-# Yinwang Blog Archive DESIGN.md — 视觉与交互契约（单一真源）
+# InkVault DESIGN.md — 视觉与交互契约（单一真源）
 
 原型（`design/prototype/`）与站点实现（`assets/site/styles/main.css`、`yinwang-archive/site.rkt` 模板）都遵循本文件；改视觉先改这里，再同步实现。
 Tokens 逐值提取自 `assets/site/styles/main.css` 现行值（家族 site-kit 调色板：一支 terracotta accent 贯穿 jrtx.site 全线），保证原型 → Racket 站点生成零翻译成本。
@@ -10,6 +10,10 @@ Tokens 逐值提取自 `assets/site/styles/main.css` 现行值（家族 site-kit
 - **原型范围**（5 屏 × 亮/暗）：① 文章列表首页（英雄屏，年份分组 + 分页 + 搜索入口）② 文章阅读页（TOC / 代码高亮 / 上下一篇 / 阅读进度）③ 搜索浮层激活态（Ctrl/Cmd+K，命中高亮 + 空态）④ 存档说明页（新增页提案：数据来源 / 同步机制 / 删除文章保全 / 更正通道 / 许可）⑤ 已移除文章阅读态（提案演示：ArchiveBanner + Git 历史入口）。
 - **Exit 条件**：5 屏关键状态齐（含暗态、搜索空态、已移除横幅态）+ 交互逻辑定稿 + HIG 清单全过 + 用户评审通过。
 - **不在范围**：改爬虫/CI/schema、渲染管线（`render.rkt`）、暗色手动切换开关进站点（站点按 `prefers-color-scheme` 自动，原型中 ◐ 仅为评审工具）、付费/授权 UI、新增语言版本。
+
+## 品牌（2026-11-26）
+
+公开站名统一为 InkVault，中文描述保留「王垠博客存档」。现有 URL、CLI、归档内容及原作者署名不变。计划同步不是成功保证。此切片仅调整名称与文案，不改变布局或交互。
 
 ## 设计原则（HIG 内核 × 存档站）
 

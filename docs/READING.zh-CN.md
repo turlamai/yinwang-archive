@@ -1,4 +1,4 @@
-# 阅读王垠博客备份
+# 阅读 InkVault（王垠博客存档）
 
 [English](READING.md) · **简体中文**
 
