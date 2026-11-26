@@ -16,7 +16,8 @@
          "util.rkt"
          "frontmatter.rkt"
          "render.rkt"
-         "site.rkt")
+         "site.rkt"
+         "archive-gaps.rkt")
 
 (provide build-site
          load-posts
@@ -103,7 +104,7 @@
     (for ([i (in-naturals)] [p (in-list posts)])
       (define older (if (< (+ i 1) (length posts)) (list-ref posts (+ i 1)) #f))
       (define newer (if (> i 0) (list-ref posts (- i 1)) #f))
-      (write-page! out (dict-ref p 'url) (post-page p older newer)))
+      (write-page! out (dict-ref p 'url) (post-page (dict-set p 'html (annotate-missing-images (dict-ref p 'html))) older newer)))
 
     ;; metadata outputs
     (write-utf8! (build-path out "feed.xml") (feed-xml posts))

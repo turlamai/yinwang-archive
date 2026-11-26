@@ -124,3 +124,7 @@ the archived posts remain copyrighted by their author — see [LICENSE](LICENSE)
 ## Copyright
 
 All archived posts are copyrighted by their original author. No content is sold or relicensed. See the [correction and removal process](docs/READING.md).
+
+### Known historical gaps
+
+Ten diagrams in the computer-science article are absent from the stored image directory and its queried Git path history. The generated reading page labels those gaps; the original Markdown remains unchanged. CI reports the exact known gaps and rejects new missing references or stale gap entries. No images are fetched or fabricated.

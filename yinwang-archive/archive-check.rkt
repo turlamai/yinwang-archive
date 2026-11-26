@@ -3,7 +3,7 @@
 ;; Offline integrity check: local Markdown is authoritative; the old
 ;; collector index is only a historical subset. Never contacts the source.
 (require racket/file racket/path racket/string racket/list racket/dict
-         json net/uri-codec "frontmatter.rkt" "util.rkt" "build.rkt")
+         json net/uri-codec "frontmatter.rkt" "util.rkt" "build.rkt" "archive-gaps.rkt")
 (provide check-archive missing-local-images)
 
 ;; The renderer emits quoted src attributes. Check root-relative archived
@@ -60,9 +60,16 @@
       (err! (format "~a: historical index points to missing article" slug))))
   (printf "Offline archive: ~a articles, ~a historical index entries\n"
           (length paths) (hash-count posts))
+  (define observed-gaps (make-hash))
   (for ([post (in-list (load-posts root))])
     (for ([src (in-list (missing-local-images root (dict-ref post 'html)))])
-      (err! (format "~a: missing or empty local image ~a" (dict-ref post 'slug) src))))
+      (if (and (equal? (dict-ref post 'slug) "computer-science")
+               (member src known-missing-images))
+          (begin (hash-set! observed-gaps src #t)
+                 (printf "Known historical gap: ~a\n" src))
+          (err! (format "~a: missing or empty local image ~a" (dict-ref post 'slug) src)))))
+  (for ([src (in-list known-missing-images)] #:unless (hash-has-key? observed-gaps src))
+    (err! (format "Stale historical gap entry (review and remove): ~a" src)))
   (reverse errors))
 
 (module+ main
