@@ -1,4 +1,4 @@
-# Yinwang Blog Archive
+# InkVault
 
 王垠博客（[yinwang.org](https://yinwang.org)）文章自动备份。通过 GitHub Actions 每周自动爬取，将所有博文保存为 Markdown 文件并下载图片。已删除的文章通过 Git 历史保留。
 
@@ -8,7 +8,7 @@
 
 ## 阅读入口
 
-[阅读王垠博客备份](https://yinwang.jrtx.site/) · [阅读、隐私与更正](docs/READING.zh-CN.md)
+[阅读 InkVault（王垠博客存档）](https://yinwang.jrtx.site/) · [阅读、隐私与更正](docs/READING.zh-CN.md)
 
 这是免费阅读备份，不是作者官方网站。每周抓取属于计划任务，不保证成功，失败时可能保留旧副本。排版、图片与代码可能与原文不同，Git 历史可保留旧修订。不增加付费内容或广告。
 

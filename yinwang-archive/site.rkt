@@ -20,7 +20,7 @@
 (define umami-id "38c4a1f4-0780-448e-a6f3-2e614c245585")
 
 (define default-description
-  "王垠博客文章备份与检索，自动同步 yinwang.org，版权归原作者所有")
+  "王垠博客文章备份与检索，按计划同步 yinwang.org，版权归原作者所有")
 
 ;; Content hash of main.css, set by build.rkt so every deploy gets a
 ;; fresh stylesheet URL (Cloudflare/GH Pages would otherwise serve a
@@ -332,7 +332,7 @@ SCRIPT
   (define url (dict-ref p 'url))
   (define jsonld
     (format
-     "<script type=\"application/ld+json\">\n{\n  \"@context\": \"https://schema.org\",\n  \"@type\": \"Article\",\n  \"headline\": ~a,\n  \"datePublished\": ~a,\n  \"author\": { \"@type\": \"Person\", \"name\": ~a },\n  \"publisher\": { \"@type\": \"Organization\", \"name\": \"王垠博客备份\" },\n  \"mainEntityOfPage\": ~a,\n  \"inLanguage\": \"zh-CN\"\n}\n</script>\n"
+     "<script type=\"application/ld+json\">\n{\n  \"@context\": \"https://schema.org\",\n  \"@type\": \"Article\",\n  \"headline\": ~a,\n  \"datePublished\": ~a,\n  \"author\": { \"@type\": \"Person\", \"name\": ~a },\n  \"publisher\": { \"@type\": \"Organization\", \"name\": \"InkVault\" },\n  \"mainEntityOfPage\": ~a,\n  \"inLanguage\": \"zh-CN\"\n}\n</script>\n"
      (jsexpr->string title)
      (jsexpr->string (or created ""))
      (jsexpr->string author)
@@ -535,11 +535,11 @@ SCRIPT
 
 (define (llms-txt posts)
   (string-append
-   (format "# 王垠博客备份（~a）\n\n" site-name)
+   (format "# ~a — 王垠博客存档\n\n" site-name)
    "> 王垠（Yin Wang）博客 yinwang.org 的自动备份存档站。内容版权归原作者所有，本站仅作备份，不销售任何内容。文章为中文，主题涵盖编程语言、Lisp/Scheme、编译器、程序设计思想、人工智能等。\n\n"
    (format "站点：~a\n" site-base-url)
    (format "订阅：~a/feed.xml\n" site-base-url)
-   "更新：每周自动同步源站新文章\n\n"
+   "更新：计划每周同步源站；失败时保留已有存档\n\n"
    (format "## 文章索引（~a 篇，按时间倒序）\n" (length posts))
    (string-append*
     (for/list ([p (in-list posts)])

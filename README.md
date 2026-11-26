@@ -1,4 +1,4 @@
-# Yinwang Blog Archive
+# InkVault
 
 Auto-crawled archive of [yinwang.org](https://yinwang.org) blog posts by Wang Yin. The crawler runs weekly via GitHub Actions, saving every post as Markdown with images. Deleted articles are preserved through Git history.
 
@@ -8,7 +8,7 @@ Auto-crawled archive of [yinwang.org](https://yinwang.org) blog posts by Wang Yi
 
 ## Read first
 
-[Read the Yinwang Blog Archive](https://yinwang.jrtx.site/) · [Reading, privacy and corrections](docs/READING.md)
+[Read the InkVault](https://yinwang.jrtx.site/) · [Reading, privacy and corrections](docs/READING.md)
 
 Free reading archive, not the author’s official website. Weekly crawling is scheduled rather than guaranteed; a failed crawl can leave an older copy. Formatting, images and code may differ from the original, and Git history can retain earlier revisions. No paid content or ads are added.
 

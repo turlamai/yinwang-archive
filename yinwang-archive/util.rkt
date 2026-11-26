@@ -37,7 +37,7 @@
   (build-path root "assets" "site"))
 
 (define base-url "https://yinwang.org")
-(define site-name "王垠博客备份")
+(define site-name "InkVault")
 (define site-base-url (or (getenv "SITE_BASE_URL") "https://yinwang.jrtx.site"))
 (define site-language (or (getenv "SITE_MAIN_LANGUAGE") "zh"))
 
