@@ -74,17 +74,9 @@ raco yinwang-archive normalize-code [--check]              # 顶层缩进代码�
 
 `posts/` 是存档唯一内容来源，`index.json` 是历史采集索引而非完整目录。停更基线包含 176 个 Markdown 文件和 130 条采集索引；其余 46 篇保留，不推断缺失索引的原因。在仓库根目录执行 `racket yinwang-archive/archive-check.rkt` 校验文件名与 slug 的一致性，以及索引指向的文件是否缺失。同时检查渲染后的 `/images/` 本地图片引用是否指向非空文件。检查完全离线，不验证外部资源、图片解码或源站可用性。
 
-## 历史实现（采集器已停用）
+## 仅维护状态
 
-保留采集器作为历史源代码，不推荐运行。未经新的站长决定且未确认符合原作者访问策略，不得恢复自动采集。
-
-1. **获取文章列表** — 爬虫调用 `https://yinwang.org/api/v1/posts` 接口，通过分页参数（`skip`/`limit`）获取所有文章 slug。
-2. **去重检查** — 根据已有的 `source` URL 构建索引，避免生成重复文件。
-3. **逐篇下载** — 对每个 slug，从 `https://yinwang.org/api/v1/posts/{slug}` 获取完整正文（`content_html`，HTML），转换为 Markdown。
-4. **下载图片** — 文章中引用的所有图片下载到 `images/{slug}/` 目录。
-5. **格式化并保存** — 对转换后的 Markdown 做排版处理（CJK 间距、标题层级规范化、代码块转围栏），生成带 YAML frontmatter 的文件。若多数文章拿不到正文，爬取会显式报错而不是静默停更。
-6. **更新索引** — 将每篇已处理文章的元数据更新到 `index.json`（与历史 Python 序列化器字节兼容，无变化时不产生 diff）。
-7. **建站** — 生成器将 Markdown 渲染为 HTML（标题锚点、围栏代码 + 客户端 highlight.js、Atom 订阅、搜索索引、sitemap、llms.txt）输出到 `dist/`。
+本项目已退役。采集器和通知器源代码仅供历史参考，不运行对应命令。保留标题搜索，不再规划全文索引或新产品功能。仓库保留必要维护权限，以便处理更正与下架请求。
 
 ### 文章格式
 
