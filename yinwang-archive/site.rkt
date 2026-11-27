@@ -53,21 +53,46 @@
     update();
   }
 
-  /* ---- images: lazy load + lightbox ---- */
+  /* ---- images: lazy load + keyboard-accessible lightbox ---- */
   var lb=document.getElementById('lightbox');
   if(lb){
-    var lbImg=lb.querySelector('img');
-    var closeLb=function(){lb.classList.remove('active');lbImg.src='';lb.setAttribute('aria-hidden','true');document.body.style.overflow='';};
+    var lbImg=lb.querySelector('img'),lbClose=document.getElementById('lightbox-close');
+    var lbOpener=null,lbOverflow='';
+    function lbActive(){return lb.classList.contains('active');}
+    function closeLb(){
+      if(!lbActive())return;
+      lb.classList.remove('active');lbImg.removeAttribute('src');
+      document.body.style.overflow=lbOverflow;
+      if(lbOpener&&lbOpener.isConnected)lbOpener.focus({preventScroll:true});
+      lb.setAttribute('aria-hidden','true');lbOpener=null;
+    }
+    function openLb(img){
+      if(lbActive()||document.querySelector('.search-overlay.active'))return;
+      lbOpener=img;lbOverflow=document.body.style.overflow;
+      lbImg.src=img.currentSrc||img.src;lbImg.alt=img.alt||'';
+      lb.classList.add('active');lb.setAttribute('aria-hidden','false');
+      document.body.style.overflow='hidden';lbClose.focus({preventScroll:true});
+    }
     document.querySelectorAll('.post-content img').forEach(function(img){
       img.loading='lazy';img.decoding='async';
-      img.addEventListener('click',function(){
-        lbImg.src=img.currentSrc||img.src;lbImg.alt=img.alt||'';
-        lb.classList.add('active');lb.setAttribute('aria-hidden','false');
-        document.body.style.overflow='hidden';
+      if(img.closest('a,button'))return;
+      img.setAttribute('role','button');img.tabIndex=0;
+      img.setAttribute('aria-label',img.alt?'放大图片：'+img.alt:'放大图片');
+      img.addEventListener('click',function(){openLb(img);});
+      img.addEventListener('keydown',function(e){
+        if(e.key==='Enter'||e.key===' '){e.preventDefault();openLb(img);}
       });
     });
-    lb.addEventListener('click',closeLb);
-    document.addEventListener('keydown',function(e){if(e.key==='Escape'&&lb.classList.contains('active'))closeLb();});
+    lbClose.addEventListener('click',closeLb);
+    lb.addEventListener('click',function(e){if(e.target===lb)closeLb();});
+    document.addEventListener('keydown',function(e){
+      if(!lbActive())return;
+      if(e.key==='Escape'){e.preventDefault();closeLb();}
+      else if(e.key==='Tab'){e.preventDefault();lbClose.focus();}
+    });
+    document.addEventListener('focusin',function(e){
+      if(lbActive()&&!lb.contains(e.target))lbClose.focus();
+    });
   }
 
   /* ---- post TOC (progressive enhancement, built from anchored h2/h3) ---- */
@@ -100,7 +125,7 @@
 
   /* ---- arrow keys walk to the previous / next post ---- */
   document.addEventListener('keydown',function(e){
-    if(e.defaultPrevented||e.altKey||e.ctrlKey||e.metaKey)return;
+    if(e.defaultPrevented||e.altKey||e.ctrlKey||e.metaKey||document.querySelector('.search-overlay.active,.lightbox.active'))return;
     var t=e.target;
     if(t&&(t.tagName==='INPUT'||t.tagName==='TEXTAREA'||t.isContentEditable))return;
     var older=document.querySelector('.post-nav-older');
@@ -119,46 +144,77 @@ SCRIPT
 (function(){
   var trigger=document.getElementById('search-trigger');
   var overlay=document.getElementById('search-overlay');
-  var backdrop=overlay.querySelector('.search-backdrop');
   var input=document.getElementById('search-input');
   var results=document.getElementById('search-results');
-  var searchData=null;
-
-  function open(){overlay.classList.add('active');document.body.style.overflow='hidden';input.focus();}
-  function close(){overlay.classList.remove('active');document.body.style.overflow='';input.value='';results.innerHTML='<div class="search-hint">输入关键词开始搜索</div>';}
-
-  trigger.addEventListener('click',open);
-  backdrop.addEventListener('click',close);
-
-  document.addEventListener('keydown',function(e){
-    if((e.metaKey||e.ctrlKey)&&e.key==='k'){e.preventDefault();overlay.classList.contains('active')?close():open();}
-    if(e.key==='Escape'&&overlay.classList.contains('active'))close();
-  });
-
-  function load(cb){
-    if(searchData){cb();return;}
-    fetch('/search.json').then(function(r){return r.json();}).then(function(d){searchData=d;cb();}).catch(function(){results.innerHTML='<div class="search-hint">加载失败，请刷新重试</div>';});
+  var closeButton=document.getElementById('search-close');
+  var pending=null, searchData=null, opener=null, overflow='', generation=0;
+  function active(){return overlay.classList.contains('active');}
+  function hint(message){
+    var node=document.createElement('div');node.className='search-hint';
+    node.textContent=message;results.replaceChildren(node);
   }
-
+  function open(){
+    if(active()||document.querySelector('.lightbox.active'))return;
+    opener=document.activeElement;overflow=document.body.style.overflow;
+    overlay.classList.add('active');overlay.setAttribute('aria-hidden','false');
+    document.body.style.overflow='hidden';input.focus();
+  }
+  function close(){
+    if(!active())return;
+    generation++;overlay.classList.remove('active');
+    document.body.style.overflow=overflow;input.value='';
+    hint('输入关键词开始搜索');
+    (opener&&opener.isConnected?opener:trigger).focus({preventScroll:true});
+    overlay.setAttribute('aria-hidden','true');opener=null;
+  }
+  trigger.addEventListener('click',open);
+  closeButton.addEventListener('click',close);
+  overlay.querySelector('.search-backdrop').addEventListener('click',close);
+  document.addEventListener('keydown',function(e){
+    if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='k'&&!document.querySelector('.lightbox.active')){
+      e.preventDefault();active()?close():open();return;
+    }
+    if(!active())return;
+    if(e.key==='Escape'){e.preventDefault();close();}
+    if(e.key==='Tab'){
+      var nodes=[input,closeButton].concat(Array.from(results.querySelectorAll('a[href]')));
+      var first=nodes[0],last=nodes[nodes.length-1];
+      if(e.shiftKey&&(document.activeElement===first||!overlay.contains(document.activeElement))){e.preventDefault();last.focus();}
+      else if(!e.shiftKey&&(document.activeElement===last||!overlay.contains(document.activeElement))){e.preventDefault();first.focus();}
+    }
+  });
+  document.addEventListener('focusin',function(e){if(active()&&!overlay.contains(e.target))input.focus();});
+  function load(){
+    if(searchData)return Promise.resolve(searchData);
+    if(!pending)pending=fetch('/search.json').then(function(r){
+      if(!r.ok)throw Error('search index unavailable');return r.json();
+    }).then(function(d){
+      if(!Array.isArray(d))throw Error('invalid search index');
+      searchData=d;return d;
+    }).finally(function(){pending=null;});
+    return pending;
+  }
   input.addEventListener('input',function(){
-    var q=this.value.trim().toLowerCase();
-    if(!q){results.innerHTML='<div class="search-hint">输入关键词开始搜索</div>';return;}
-    load(function(){
-      var matched=searchData.filter(function(p){return p.title.toLowerCase().indexOf(q)!==-1;});
-      if(!matched.length){results.innerHTML='<div class="search-hint">没有找到「'+q.replace(/</g,'&lt;')+'」相关的文章</div>';return;}
-      var html='';
-      matched.slice(0,15).forEach(function(p){
-        var t=p.title.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-        var idx=t.toLowerCase().indexOf(q);
-        if(idx!==-1){t=t.substring(0,idx)+'<mark>'+t.substring(idx,idx+q.length)+'</mark>'+t.substring(idx+q.length);}
-        html+='<a href="'+p.url+'" class="search-result-item">'
-          +'<span class="search-result-title">'+t+'</span>'
-          +'<span class="search-result-date">'+p.date+'</span>'
-          +'</a>';
+    var q=input.value.trim().toLowerCase(), token=++generation;
+    if(!q){hint('输入关键词开始搜索');return;}
+    hint('正在加载搜索索引…');
+    load().then(function(data){
+      if(!active()||token!==generation)return;
+      var matched=data.filter(function(p){
+        return typeof p.title==='string'&&typeof p.url==='string'&&p.url.startsWith('/posts/')&&p.title.toLowerCase().includes(q);
       });
-      if(matched.length>15)html+='<div class="search-hint">还有 '+(matched.length-15)+' 篇相关文章</div>';
-      results.innerHTML=html;
-    });
+      if(!matched.length){hint('没有找到相关的文章');return;}
+      results.replaceChildren();
+      matched.slice(0,15).forEach(function(p){
+        var a=document.createElement('a'),t=document.createElement('span'),d=document.createElement('span');
+        a.href=p.url;a.className='search-result-item';t.className='search-result-title';d.className='search-result-date';
+        var idx=p.title.toLowerCase().indexOf(q),mark=document.createElement('mark');
+        mark.textContent=p.title.slice(idx,idx+q.length);
+        t.append(p.title.slice(0,idx),mark,p.title.slice(idx+q.length));d.textContent=p.date||'';
+        a.append(t,d);results.appendChild(a);
+      });
+      if(matched.length>15){var more=document.createElement('div');more.className='search-hint';more.textContent='还有 '+(matched.length-15)+' 篇相关文章';results.appendChild(more);}
+    }).catch(function(){if(active()&&token===generation)hint('加载失败，请重新输入关键词重试');});
   });
 })();
 </script>
@@ -256,21 +312,22 @@ SCRIPT
    "    </div>\n"
    "  </div>\n"
    "\n"
-   "<div id=\"search-overlay\" class=\"search-overlay\">\n"
+   "<div id=\"search-overlay\" class=\"search-overlay\" aria-hidden=\"true\">\n"
    "  <div class=\"search-backdrop\"></div>\n"
-   "  <div class=\"search-dialog\">\n"
+   "  <div class=\"search-dialog\" role=\"dialog\" aria-modal=\"true\" aria-label=\"搜索文章\">\n"
    "    <div class=\"search-input-wrap\">\n"
    "      <svg class=\"search-icon\" width=\"20\" height=\"20\" viewBox=\"0 0 20 20\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\"><circle cx=\"8.5\" cy=\"8.5\" r=\"5.5\"/><line x1=\"13\" y1=\"13\" x2=\"18\" y2=\"18\"/></svg>\n"
-   "      <input type=\"text\" id=\"search-input\" placeholder=\"搜索文章标题…\" autocomplete=\"off\">\n"
-   "      <kbd class=\"search-kbd\">Esc</kbd>\n"
+   "      <input type=\"text\" id=\"search-input\" placeholder=\"搜索文章标题…\" aria-label=\"搜索文章标题\" autocomplete=\"off\">\n"
+   "      <button type=\"button\" id=\"search-close\" class=\"search-kbd\" aria-label=\"关闭搜索\">关闭</button>\n"
    "    </div>\n"
-   "    <div id=\"search-results\" class=\"search-results\">\n"
+   "    <div id=\"search-results\" class=\"search-results\" aria-live=\"polite\">\n"
    "      <div class=\"search-hint\">输入关键词开始搜索</div>\n"
    "    </div>\n"
    "  </div>\n"
    "</div>\n"
    "\n"
-   "<div id=\"lightbox\" class=\"lightbox\" aria-hidden=\"true\">\n"
+   "<div id=\"lightbox\" class=\"lightbox\" role=\"dialog\" aria-modal=\"true\" aria-label=\"图片预览\" aria-hidden=\"true\">\n"
+   "  <button type=\"button\" id=\"lightbox-close\" class=\"lightbox-close\" aria-label=\"关闭图片预览\">关闭</button>\n"
    "  <img alt=\"\">\n"
    "</div>\n"
    "\n"

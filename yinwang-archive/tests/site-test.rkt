@@ -35,3 +35,13 @@
 (test-case "sitemap excludes retired promotion"
   (check-false (string-contains? (sitemap-xml (list post) 1) "/wechat/"))
   (check-true (string-contains? (sitemap-xml (list post) 1) "/posts/test/")))
+
+(test-case "search has labelled modal and explicit close action"
+  (define html (index-page (list post) 0 1))
+  (for ([fragment (in-list '("aria-modal=\"true\"" "id=\"search-close\"" "aria-label=\"搜索文章标题\"" "aria-live=\"polite\"" "token!==generation" "preventScroll:true"))])
+    (check-true (string-contains? html fragment))))
+
+(test-case "image preview provides keyboard activation and a labelled close action"
+  (define html (post-page post #f #f))
+  (for ([fragment (in-list '("id=\"lightbox-close\"" "aria-label=\"图片预览\"" "img.closest('a,button')" "img.tabIndex=0" "lbOpener.focus" "lbClose.focus"))])
+    (check-true (string-contains? html fragment))))
