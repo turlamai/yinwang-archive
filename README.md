@@ -75,17 +75,9 @@ the current directory.
 
 `posts/` is the authoritative archive. `index.json` is the historical collector index, not a complete catalog. At the retirement baseline there are 176 Markdown files and 130 collector entries; the 46 other files are retained without assuming why they are absent from the index. Run `racket yinwang-archive/archive-check.rkt` from the repository root to check filename/slug identity and missing indexed files. The check also verifies that rendered root-relative `/images/` references point to nonempty local files. It does not validate external resources, image decoding or source availability.
 
-## Historical implementation (inactive collector)
+## Maintenance-only status
 
-The collector is retained as historical source code, not a recommended operation. Do not resume automated collection without a new maintainer decision and respect for the source owner's access policy.
-
-1. **Fetch post list** — the crawler calls `https://yinwang.org/api/v1/posts` with pagination (`skip`/`limit`) to get all post slugs.
-2. **Deduplicate** — it builds an index of existing posts by `source` URL to avoid duplicates.
-3. **Download each post** — for each slug, it fetches the full post body (`content_html`, HTML) from `https://yinwang.org/api/v1/posts/{slug}` and converts it to Markdown.
-4. **Download images** — all images referenced in the post are downloaded to `images/{slug}/`.
-5. **Format and save** — the converted Markdown is reformatted (CJK spacing, heading normalization, code fence conversion) and saved with YAML frontmatter. If most posts come back without a body, the crawl fails loudly instead of silently freezing the archive.
-6. **Update index** — `index.json` is updated with metadata for each processed post (byte-compatible with the historical Python serializer, so no-op crawls stay diff-free).
-7. **Build** — the site generator renders Markdown → HTML (heading anchors, fenced code with client-side highlight.js, Atom feed, search index, sitemap, llms.txt) into `dist/`.
+The archive is retired. The collector and notifier source remains for historical reference only; do not run either command. Title search is the supported scope. No new full-text index or product features are planned. Keep the repository writable for necessary corrections and removal requests.
 
 ### Post format
 

@@ -1,10 +1,6 @@
-# 项目概述
+# InkVault — 历史存档维护
 
-**2026-11-26 站长决定（优先于以下历史说明）：不生成公众号推广页或二维码，不加载第三方统计，不链接产品主页。退出活跃产品组合，停止所有自动采集与推广，仅维护历史快照、离线构建和版权更正/下架。以下采集实现说明仅供历史参考，不得恢复定时或手动抓取工作流。**
-
-## Commercial authorization decision
-
-Decision `2026-10-auth-1`: this remains a free content/community project. Do not add Permit commercial credentials, Commerce checkout, licensing accounts or a content paywall. Preserve source attribution, existing licenses and reader recovery/correction paths. Read the [portfolio authorization map](https://github.com/turlamai/turlamai.github.io/blob/master/PORTFOLIO.md#authorization-integration-map) at each new slice and record the source/policy SHAs actually read; an updated file is not an acknowledgement by an already running agent.
+**站长决定（2026-11-26 起停更）：退出活跃产品组合，仅保留既有历史资料、离线构建、必要的安全与版权更正/下架维护。** 不恢复自动或手动采集，不主动访问源站，不扩大存档范围，不新增全文索引、商业授权、广告、第三方统计或推广入口。保留标题搜索与现有阅读体验。历史采集器代码仅供回溯，不运行 crawl 或 notify。
 
 ## Required policy discovery at each slice
 
@@ -26,31 +22,24 @@ without stashing, resetting or overwriting their work. Missing/offline policy
 inputs must be reported as unverified, not silently claimed current.
 
 
-王垠博客（yinwang.org）文章备份站，**Racket 全栈**：爬虫、校验、静态站生成同属一个 Racket 包，`raco yinwang-archive <命令>` 驱动。通过 API 爬取博文保存为 Markdown，生成静态站部署 GitHub Pages（GitHub Actions 每周一爬取）。posts 目录为**站点源文件**（不再考虑导回 Obsidian）。
 
-## 命令（最重要）
+## 维护范围
 
+- `posts/` 为站点内容唯一来源；`images/` 为已有图片；`index.json` 为历史采集索引，不是完整目录。
+- 保留作者、原文链接、日期和原始正文；不推断作者删除原因，不伪造缺失图片。按 `archive-gaps.rkt` 标注已知缺失，拒绝新增缺失。
+- 权利人可通过仓库 Issues 提交更正或下架请求，仅提交涉及 URL 与请求动作，不公开私密材料。未核实的联系方式不得发布。遵守 `docs/READING.md` 与中文版；必要时移除站点、搜索、订阅、生成产物和可处理的历史缓存。
+- 保持仓库可维护以处理更正请求，保留部署工作流及 Pages 所需分支；不为清零数字而关闭真实未验证的问题。
+
+## 离线命令
+
+```sh
+raco test -p yinwang-archive
+raco yinwang-archive lint
+racket yinwang-archive/archive-check.rkt
+raco yinwang-archive build
 ```
-raco yinwang-archive crawl [--force] [--root DIR]   # 爬取（增量；--force 全量）
-raco yinwang-archive lint [--root DIR]              # 全量校验，CI 门禁，应恒 0 错误
-raco yinwang-archive build [--out DIR] [--root DIR] # 生成静态站到 dist/
-raco yinwang-archive fix-bold-spacing [--check|--dry-run]  # 修复坏强调
-raco yinwang-archive normalize-code [--check]       # 顶层缩进代码转围栏
-raco yinwang-archive notify [--root DIR]            # 新文章邮件（缺省 dry-run）
-```
 
-改完代码跑 `raco test -p yinwang-archive`（测试在 `yinwang-archive/tests/`）。
-
-## 包结构（yinwang-archive/）
-
-- `crawler.rkt`：主爬虫。增量逻辑 = source URL 去重 + `updated_at` 未变跳过；正文取 API 的 `content_html`（HTML，经 `htmlmd.rkt` 转 Markdown；兼容旧 `content` 字段）；`format-content` 含自愈链（坏强调修复、顶层缩进代码转围栏、层级规范化、盘古空格），新爬内容自动规范化。爬完后若「无正文」文章数超阈值（默认 10）则报错退出——防止源站 API schema 变更时存档静默停更（2026-10 事故教训）
-- `htmlmd.rkt`：`content_html` → Markdown 转换。解析用 catalog `markdown` 包的 HTML parser，实体先编码为 PUA 占位符再还原（该 parser 会吞掉文本中的实体）；heading-anchor 解包、`<img width>` 保留 HTML 形式、`<ol start>` 续编号、h4+ 转加粗、`<pre>` 保留原文并剥真实标签
-- `format.rkt`：自愈链本体，`lint.rkt`/`fixers.rkt` 与其共享（lint 把 transform 输出与原文比较判损伤）
-- `render.rkt`：Markdown → HTML。用 catalog 的 `markdown` 包解析 + 后处理对齐历史 markdown-it 行为：锚点 slugify（trim/lowercase/空白→`-`，重名加 `-1`）、figure div 还原为裸 img、`brush:` class 换 `language-x`、`**粗体**` 预转 `<strong>`（解析器对 CJK 相邻粗体有 bug）、smart typography 实体解回 ASCII
-- `site.rkt`：全部页面模板（base/post/index/feed/search/sitemap/llms），浏览器端 JS（搜索/进度条/lightbox/TOC）原样保留——属合法薄壳层
-- `build.rkt`：dist 写出。分页 50 篇/页，资产从 `assets/site/` 与 `images/` 拷贝
-- `notify.rkt`：git 未跟踪文件检测 + curl SMTP（Racket net/smtp 无 STARTTLS，smtp.qq.com 需要）
-- `util.rkt`：含 **正则方言 shim**（`ws-chars`/`nl-char`/`tick-char` 等）与 python 兼容 JSON 序列化器
+仅在必要的维护修复中使用格式修复命令；不批量改写历史正文。所有运行从仓库根目录执行。CI 通过不等于真实浏览器验收。
 
 ## 文件命名（最重要）
 
@@ -80,8 +69,8 @@ source: https://yinwang.org/posts/mites
 
 - 正文以 `# {title}` 开始（每篇文件自包含）；渲染时剥掉首个 H1（页面头已有标题）
 - 大节用 `##`，小节用 `###`
-- 避免 `####` 及更深：爬虫会自动转为加粗段首词
-- 若全文无 `##` 而有 `###`，爬虫自动把 `###` 升为 `##`（顶层小节统一 H2）
+- 避免 `####` 及更深：历史采集器曾自动转为加粗段首词
+- 若全文无 `##` 而有 `###`，历史采集器曾自动把 `###` 升为 `##`（顶层小节统一 H2）
 - 正文中的 `#` 如果不是标题而是代码（如 `#define`），必须用行内代码包裹
 
 ## 图片
@@ -92,14 +81,9 @@ source: https://yinwang.org/posts/mites
 ## 排版规范
 
 - 段落之间空 1 行，段落内部无空行；列表项之间不加空行
-- 代码块必须标注语言类型；**顶层缩进代码块会被渲染管线破坏，必须用围栏**（爬虫自动转换）
+- 代码块必须标注语言类型；**顶层缩进代码块会被渲染管线破坏，必须用围栏**（历史采集器曾自动转换）
 - CJK 与半角字符之间加空格（如 `使用 C++ 编程`），但 Markdown 标记（`*` `_` `~`）与内容之间**禁止**插空格，否则强调失效
 
-## 去重与幂等
-
-- 新增文章前，通过 frontmatter 的 `source` URL 检查是否已存在（`build_source_index()`）
-- 爬虫默认增量：`updated_at` 未变的文章跳过，不会重写本地已修复的文件
-- `index.json` 序列化与历史 Python `json.dump(indent=2)` **字节兼容**（`json-obj` 结构体保序 + 无尾换行），无变化爬取零 diff
 
 ## Racket 9.3 正则方言（大坑，必读）
 
@@ -115,25 +99,12 @@ source: https://yinwang.org/posts/mites
 
 ## CI
 
-- `ci.yml`：ubuntu + macos 双机跑 raco test / lint / build（push + PR）
+- `ci.yml`：ubuntu + macos 双机跑 raco test / lint / archive-check / build（push + PR）
 - 原 `crawl.yml` 已删除；不再自动抓取或通知。
 - `deploy.yml`：push 到 main/master 构建 dist 部署 GH Pages
 - 配方：`Bogdanp/setup-racket` → `raco pkg install --auto --no-docs markdown http-easy-lib` → `raco pkg install --auto --no-docs --link "$(pwd)"`
 
-## 商业定调与界面取向
 
-**阅读体验优先**。文章页：紧凑单行头部、768px 阅读列（~42 字/行）；**广告全线撤掉（不挂广告）**：AdSense 脚本与 meta、桌面双浮坑、移动单坑、ads.txt 已全部移除。**文章页内不放任何转化元素**（文尾公众号卡片曾试加，用户否决：突兀、图太小、生硬）。公众号转化只走两处：页脚一行链接 + `/wechat/` 专页（站长介绍 + 官方二维码 `wechat-qr.jpg` + 微信号，`build.rkt` 写出、sitemap 收录）。页脚两行极简：版权声明 + RSS/公众号链接（访问统计、站长主页、GitHub 链接、删除请求入口已裁撤——需要下架的版权方直接邮件联系站长）。阅读细节：方向键 ←/→ 切换上/下一篇（`site.rkt` 内联 JS）、`::selection`/focus-visible 主题色、引用块降噪（无底色填充）、行内代码不与链接抢色、vendor highlight.js 附带 lisp/scheme/haskell 语言包（common bundle 不含这三门，语料里有）。
+## 视觉与交互
 
-## 产品交付与下一步（2026-10-23）
-
-- 家族[交付标准](https://github.com/turlamai/turlamai.github.io/blob/master/docs/PRODUCT-STANDARD.md)与[组合策略](https://github.com/turlamai/turlamai.github.io/blob/master/PORTFOLIO.md)是共用政策；本仓具体行为以 `README.md` 为准，不复制五库依赖图。
-- 当前执行入口：[产品审查 issue](https://github.com/turlamai/yinwang-archive/issues/5)。保持免费内容维护：先验证来源/修订历史、链接/图片/代码渲染和失败抓取恢复。尊重既有阅读页与版权联系约定。
-- 开工先检查干净工作树与远端，以 fast-forward-only 更新并记录 SHA；共享文件一次一个写入者，保留其他 checkout 的未提交工作。
-- 每次只完成一个可验收切片，记录 owned files、依赖 pin、命令/平台/产物证据和回滚。已实现、已发布、实机验收分别陈述；不修改 requirements 或复用旧证据来制造通过。
-
-## 设计流程（原型先行）
-
-所有 UI 开发与界面改造一律先原型后代码：brief → `design/DESIGN.md`
-视觉契约 → HTML 原型 → 按 HIG 基准评审通过才开工；改界面先改原型再改
-代码。契约与原型放本仓 `design/`（尚未建立时随首个 UI 切片建立），
-实物截图验收后才能作为对外宣传素材。
+保留现有阅读列、主题、键盘搜索与图片灯箱。必要 UI 修复先更新设计契约与原型，真实浏览器验收单独记录。无新功能路线图；不恢复推广或采集。未完成的浏览器验收与版权反馈边界保留在维护记录中。
